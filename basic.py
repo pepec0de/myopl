@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 from strings_with_arrows import *
 
+### LEAVED at: 10:00 in https://www.youtube.com/watch?v=RriZ4q4z9gU
 # Constants
 DIGITS = "0123456789"
 
