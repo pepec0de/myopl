@@ -12,7 +12,7 @@ private:
 	string value;
 
 public:
-
+    Token() {}
     Token(TokenType pType) {
         type = pType;
         value = "";
@@ -23,7 +23,7 @@ public:
 		value = pValue;
 	}
 
-	string getTokenType() {
+	string as_string() {
         switch(type) {
         case TT_INT:
             return "TT_INT";
@@ -50,6 +50,10 @@ public:
             return "TT_RPAREN";
         }
         return "";
+	}
+
+	TokenType getTokenType() {
+        return type;
 	}
 };
 

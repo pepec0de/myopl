@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Lexer.hpp"
+#include "Parser.hpp"
 
 using namespace std;
 
@@ -17,7 +18,7 @@ void run(string text) {
     if (!error.isError()) {
         cout << "[";
         for (Token token : tokens) {
-            cout << token.getTokenType() << ", ";
+            cout << token.as_string() << ", ";
         }
         cout << "]\n";
     } else {
@@ -28,6 +29,7 @@ void run(string text) {
 int main() {
 
     // String para almacenar la operacion
+    Parser parser;
     string cmdStr;
     input(cmdStr);
     run(cmdStr);

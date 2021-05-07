@@ -1,10 +1,6 @@
 #ifndef CONSTANTS_HPP
 #define CONSTANTS_HPP
 
-#include <iostream>
-
-using namespace std;
-
 // Token types
 enum TokenType {
     TT_INT,

@@ -19,12 +19,6 @@ private:
 
 public:
     Position() {}
-//    Position() {
-//        idx = -1;
-//        ln = 0;
-//        col = -1;
-//    }
-
     Position(int pIdx, int pLn, int pCol, string pFilename, string pFileContent) {
         idx = pIdx;
         ln = pLn;
