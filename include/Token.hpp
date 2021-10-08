@@ -6,9 +6,21 @@
 
 using namespace std;
 
+enum TokenType {
+    TT_NULL,
+    TT_INT,
+    TT_FLOAT,
+    TT_PLUS,
+    TT_MINUS,
+    TT_MUL,
+    TT_DIV,
+    TT_LPAREN,
+    TT_RPAREN
+};
+
 class Token {
 private:
-	TokenType type;
+	TokenType type = TT_NULL;
 	string value;
 
 public:
@@ -25,11 +37,14 @@ public:
 
 	string as_string() {
         switch(type) {
+        case TT_NULL:
+            return "TT_NULL";
+
         case TT_INT:
-            return "TT_INT";
+            return "TT_INT:" + value;
 
         case TT_FLOAT:
-            return "TT_FLOAT";
+            return "TT_FLOAT:" + value;
 
         case TT_PLUS:
             return "TT_PLUS";
