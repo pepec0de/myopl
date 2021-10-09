@@ -2,7 +2,7 @@
 #define TOKEN_HPP
 
 #include <iostream>
-#include "Constants.hpp"
+#include "Position.hpp"
 
 using namespace std;
 
@@ -18,21 +18,54 @@ enum TokenType {
     TT_RPAREN
 };
 
+/*
+    Clase que determina el tipo de dato y si tenemos algun valor
+*/
 class Token {
 private:
 	TokenType type = TT_NULL;
 	string value;
+	Position posStart, posEnd;
 
 public:
     Token() {}
     Token(TokenType pType) {
         type = pType;
         value = "";
+
     }
 
 	Token(TokenType pType, string pValue) {
 		type = pType;
 		value = pValue;
+	}
+
+	Token(TokenType pType, string pValue, Position pPosStart, Position pPosEnd) {
+        type = pType;
+		value = pValue;
+		posStart = pPosStart;
+		posEnd = pPosEnd;
+	}
+
+	Token(TokenType pType, Position pPosStart, Position pPosEnd) {
+        type = pType;
+		posStart = pPosStart;
+		posEnd = pPosEnd;
+	}
+
+	Token(TokenType pType, string pValue, Position pPosStart) {
+        type = pType;
+		value = pValue;
+		posStart = pPosStart;
+		posEnd = pPosStart;
+		posEnd.advance();
+	}
+
+	Token(TokenType pType, Position pPosStart) {
+        type = pType;
+		posStart = pPosStart;
+		posEnd = pPosStart;
+		posEnd.advance();
 	}
 
 	string as_string() {

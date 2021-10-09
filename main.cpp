@@ -21,12 +21,13 @@ void run(string text) {
             cout << token.as_string() << ", ";
         }
         cout << "]\n";
+
+        Parser parser(tokens);
+        OperationTree ast = parser.parse();
+        cout << ast.as_string() << endl;
     } else {
         cout << error.as_string();
     }
-    Parser parser(tokens);
-    OperationTree ast = parser.parse();
-    cout << ast.as_string() << endl;
 }
 
 int main() {

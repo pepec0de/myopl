@@ -9,6 +9,9 @@ using namespace std;
     Clase para almacenar los datos de la posicion del archivo
     que vamos a interpretar
 */
+
+// NOTA: Es mejor para el compilador tener las implementaciones de los metodos en el respectivo fichero cpp
+
 class Position {
 private:
     int idx;
@@ -27,6 +30,11 @@ public:
         fileContent = pFileContent;
     }
 
+    void advance() {
+        idx++;
+        col++;
+    }
+
     void advance(char pCurrChar) {
         idx++;
         col++;
@@ -37,9 +45,9 @@ public:
         }
     }
 
-    Position getPosition() {
-        return Position(idx, ln, col, filename, fileContent);
-    }
+//    Position get() {
+//        return Position(idx, ln, col, filename, fileContent);
+//    }
 
     int getIdx() { return idx; }
     int getLn() { return ln; }

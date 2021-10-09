@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="MyOPL" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/MyOPL" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add directory="include" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/MyOPL" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add directory="include" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Unit filename="grammar.txt" />
+		<Unit filename="include/Error.hpp" />
+		<Unit filename="include/Errors.hpp" />
+		<Unit filename="include/Lexer.hpp" />
+		<Unit filename="include/OperationTree.hpp" />
+		<Unit filename="include/ParseResult.hpp" />
+		<Unit filename="include/Parser.hpp" />
+		<Unit filename="include/Position.hpp" />
+		<Unit filename="include/StringUtils.hpp" />
+		<Unit filename="include/Token.hpp" />
+		<Unit filename="main.cpp" />
+		<Unit filename="src/Error.cpp" />
+		<Unit filename="src/Lexer.cpp" />
+		<Unit filename="src/OperationTree.cpp" />
+		<Unit filename="src/ParseResult.cpp" />
+		<Unit filename="src/Parser.cpp" />
+		<Unit filename="src/Position.cpp" />
+		<Unit filename="src/StringUtils.cpp" />
+		<Unit filename="src/Token.cpp" />
+		<Extensions>
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

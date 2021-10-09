@@ -7,7 +7,7 @@
 #include "Constants.hpp"
 #include "Token.hpp"
 #include "Error.hpp"
-#include "IllegalCharError.hpp"
+#include "Errors.hpp"
 #include "Position.hpp"
 
 using namespace std;
@@ -77,6 +77,7 @@ public:
 
             case '/':
                 tokens.push_back(Token(TT_DIV));
+                advance();
                 break;
 
             case '(':
@@ -102,10 +103,14 @@ public:
                 tokens.push_back(getNumber());
             break;
 
+            case ' ':
+                advance();
+                break;
+
             default: {
                 // ERROR
                 Position posStart;
-                posStart = pos.getPosition();
+                posStart = pos;
                 errorDetails.push_back('\'');
                 errorDetails.push_back(currChar);
                 errorDetails.push_back('\'');
