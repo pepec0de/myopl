@@ -8,5 +8,10 @@ class IllegalCharError : public Error {
 
 class InvalidSyntaxError : public Error {
     public:
-        InvalidSyntaxError(Position posStart, Position posEnd, string details) : Error("Invalid Synax", posStart, posEnd, details) {}
+        InvalidSyntaxError(Position posStart, Position posEnd, string details) : Error("Invalid Syntax", posStart, posEnd, details) {}
+};
+
+class MemoryError : public Error {
+    public:
+        MemoryError() : Error("CRITICAL ERROR: Out of memory!!") {}
 };

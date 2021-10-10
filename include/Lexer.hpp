@@ -60,33 +60,38 @@ public:
 
 		while (currChar != '\0') {
 			switch (currChar) {
+            case ' ':
+            case '\t':
+                advance();
+                break;
+
             case '+':
-                tokens.push_back(Token(TT_PLUS));
+                tokens.push_back(Token(TT_PLUS, "", pos));
                 advance();
                 break;
 
             case '-':
-                tokens.push_back(Token(TT_MINUS));
+                tokens.push_back(Token(TT_MINUS, "", pos));
                 advance();
                 break;
 
             case '*':
-                tokens.push_back(Token(TT_MUL));
+                tokens.push_back(Token(TT_MUL, "", pos));
                 advance();
                 break;
 
             case '/':
-                tokens.push_back(Token(TT_DIV));
+                tokens.push_back(Token(TT_DIV, "", pos));
                 advance();
                 break;
 
             case '(':
-                tokens.push_back(Token(TT_LPAREN));
+                tokens.push_back(Token(TT_LPAREN, "", pos));
                 advance();
                 break;
 
             case ')':
-                tokens.push_back(Token(TT_RPAREN));
+                tokens.push_back(Token(TT_RPAREN, "", pos));
                 advance();
                 break;
 
@@ -103,10 +108,6 @@ public:
                 tokens.push_back(getNumber());
             break;
 
-            case ' ':
-                advance();
-                break;
-
             default: {
                 // ERROR
                 Position posStart;
@@ -119,6 +120,8 @@ public:
             }
             }
 		}
+
+		tokens.push_back(Token(TT_EOF, "", pos));
 		return tokens;
 	}
 
@@ -130,6 +133,7 @@ public:
 	Token getNumber() {
         string num_str = "";
         int dotCont = 0;
+        Position posStart = pos;
 
         while (currChar != '\0' && (isdigit(currChar) || currChar == '.')) {
             if (currChar == '.') {
@@ -143,9 +147,9 @@ public:
         }
 
         if (dotCont == 0) {
-            return Token(TT_INT, num_str);
+            return Token(TT_INT, num_str, posStart, pos);
         } else {
-            return Token(TT_FLOAT, num_str);
+            return Token(TT_FLOAT, num_str, posStart, pos);
         }
 	}
 

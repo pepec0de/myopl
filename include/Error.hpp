@@ -25,6 +25,10 @@ public:
         details = "";
     }
 
+    Error(string pErrorName) {
+        errorName = pErrorName;
+    }
+
     Error(string pErrorName, Position pPosStart, Position pPosEnd, string pDetails) {
         errorName = pErrorName;
         posStart = pPosStart;

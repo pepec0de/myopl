@@ -23,8 +23,14 @@ void run(string text) {
         cout << "]\n";
 
         Parser parser(tokens);
-        OperationTree ast = parser.parse();
-        cout << ast.as_string() << endl;
+        ParseResult resultAST = parser.parse();
+        if (resultAST.getError().isError()) {
+            cout << resultAST.getError().as_string();
+        } else {
+            OperationTree ast;
+            ast.setRootNode(resultAST.getNode());
+            cout << ast.as_string() << endl;
+        }
     } else {
         cout << error.as_string();
     }

@@ -2,7 +2,7 @@
 1619945148 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\lexer.cpp
 	"Lexer.hpp"
 
-1633708050 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\lexer.hpp
+1633781171 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\lexer.hpp
 	<iostream>
 	<vector>
 	"Constants.hpp"
@@ -16,11 +16,11 @@
 1619945131 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\token.cpp
 	"Token.hpp"
 
-1633778058 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\token.hpp
+1633781105 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\token.hpp
 	<iostream>
 	"Position.hpp"
 
-1633706341 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\main.cpp
+1633781887 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\main.cpp
 	<iostream>
 	"Lexer.hpp"
 	"Parser.hpp"
@@ -28,7 +28,7 @@
 1619951702 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\error.cpp
 	"Error.hpp"
 
-1619980450 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\error.hpp
+1633780551 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\error.hpp
 	<iostream>
 	<string>
 	"Position.hpp"
@@ -62,8 +62,8 @@
 
 1620383946 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\parser.cpp
 
-1633777128 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\parser.hpp
-	"OperationTree.hpp"
+1633863576 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\parser.hpp
+	"ParseResult.hpp"
 
 1620386811 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\operationstructs.hpp
 	"Token.hpp"
@@ -75,14 +75,14 @@
 	"StringUtils.hpp"
 	"Token.hpp"
 
-1633706951 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\errors.hpp
+1633780464 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\errors.hpp
 	"Error.hpp"
 	"Position.hpp"
 
 1633778487 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\parseresult.cpp
 	"ParseResult.hpp"
 
-1633778959 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\parseresult.hpp
+1633856973 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\parseresult.hpp
 	"Error.hpp"
 	"OperationTree.hpp"
 

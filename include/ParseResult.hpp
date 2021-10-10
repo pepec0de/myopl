@@ -6,11 +6,13 @@
 
 class ParseResult
 {
-    Node *node = NULL;
+    Node *node;
     Error error;
 
     public:
-        ParseResult();
+        ParseResult() {
+            node = NULL;
+        }
         Node* mRegister(ParseResult res) {
             if (res.getError().isError()) {
                 error = res.getError();
@@ -28,11 +30,15 @@ class ParseResult
             ParseResult copia;
             copia.setNode(getNode());
             copia.setError(getError());
-            return copia;
+            return getCopia();
         }
 
         ParseResult failure(Error pError) {
             error = pError;
+            return getCopia();
+        }
+
+        ParseResult getCopia() {
             ParseResult copia;
             copia.setNode(getNode());
             copia.setError(getError());

@@ -7,7 +7,6 @@
 using namespace std;
 
 enum TokenType {
-    TT_NULL,
     TT_INT,
     TT_FLOAT,
     TT_PLUS,
@@ -15,7 +14,8 @@ enum TokenType {
     TT_MUL,
     TT_DIV,
     TT_LPAREN,
-    TT_RPAREN
+    TT_RPAREN,
+    TT_EOF
 };
 
 /*
@@ -23,7 +23,7 @@ enum TokenType {
 */
 class Token {
 private:
-	TokenType type = TT_NULL;
+	TokenType type = TT_EOF;
 	string value;
 	Position posStart, posEnd;
 
@@ -47,12 +47,6 @@ public:
 		posEnd = pPosEnd;
 	}
 
-	Token(TokenType pType, Position pPosStart, Position pPosEnd) {
-        type = pType;
-		posStart = pPosStart;
-		posEnd = pPosEnd;
-	}
-
 	Token(TokenType pType, string pValue, Position pPosStart) {
         type = pType;
 		value = pValue;
@@ -61,18 +55,10 @@ public:
 		posEnd.advance();
 	}
 
-	Token(TokenType pType, Position pPosStart) {
-        type = pType;
-		posStart = pPosStart;
-		posEnd = pPosStart;
-		posEnd.advance();
-	}
-
-	string as_string() {
+    Position getPosStart() { return posStart; }
+    Position getPosEnd() { return posEnd; }
+    string as_string() {
         switch(type) {
-        case TT_NULL:
-            return "TT_NULL";
-
         case TT_INT:
             return "TT_INT:" + value;
 
@@ -96,6 +82,8 @@ public:
 
         case TT_RPAREN:
             return "TT_RPAREN";
+        case TT_EOF:
+            return "TT_EOF";
         }
         return "";
 	}
