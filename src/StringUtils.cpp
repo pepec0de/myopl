@@ -118,6 +118,12 @@ string StringUtils::tostring(long double value) {
     return strs.str();
 }
 
+string StringUtils::tostring(long long value) {
+    ostringstream strs;
+    strs << value;
+    return strs.str();
+}
+
 string StringUtils::tostring(char value) {
     string str;
     str.push_back(value);

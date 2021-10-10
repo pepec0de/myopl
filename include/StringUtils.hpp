@@ -25,6 +25,7 @@ class StringUtils {
         string tostring(int value);
         string tostring(float value);
         string tostring(long double value);
+        string tostring(long long value);
         string tostring(char value);
 };
 

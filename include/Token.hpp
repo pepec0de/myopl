@@ -55,6 +55,7 @@ public:
 		posEnd.advance();
 	}
 
+    string getValue() { return value; }
     Position getPosStart() { return posStart; }
     Position getPosEnd() { return posEnd; }
     string as_string() {

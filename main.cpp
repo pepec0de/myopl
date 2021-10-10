@@ -1,13 +1,13 @@
 #include <iostream>
 #include "Lexer.hpp"
 #include "Parser.hpp"
+#include "Interpreter.hpp"
 
 using namespace std;
 
 void input(string &cmdStr) {
     cout << ">> ";
     getline(cin, cmdStr);
-    // TODO : cmdStr = strUtils.replaceAll(cmdStr, " ", "");
 }
 
 void run(string text) {
@@ -30,6 +30,9 @@ void run(string text) {
             OperationTree ast;
             ast.setRootNode(resultAST.getNode());
             cout << ast.as_string() << endl;
+            Interpreter interpreter;
+            Number result = interpreter.visit(ast.getRootNode());
+            cout << result.getValue() << endl;
         }
     } else {
         cout << error.as_string();

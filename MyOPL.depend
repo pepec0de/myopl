@@ -2,10 +2,9 @@
 1619945148 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\lexer.cpp
 	"Lexer.hpp"
 
-1633781171 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\lexer.hpp
+1633875584 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\lexer.hpp
 	<iostream>
 	<vector>
-	"Constants.hpp"
 	"Token.hpp"
 	"Error.hpp"
 	"Errors.hpp"
@@ -16,14 +15,15 @@
 1619945131 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\token.cpp
 	"Token.hpp"
 
-1633781105 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\token.hpp
+1633878125 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\token.hpp
 	<iostream>
 	"Position.hpp"
 
-1633781887 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\main.cpp
+1633885506 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\main.cpp
 	<iostream>
 	"Lexer.hpp"
 	"Parser.hpp"
+	"Interpreter.hpp"
 
 1619951702 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\error.cpp
 	"Error.hpp"
@@ -49,20 +49,20 @@
 1633778192 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\position.hpp
 	<iostream>
 
-1619980030 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\stringutils.hpp
+1633876986 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\stringutils.hpp
 	<iostream>
 	<vector>
 	<string>
 	<sstream>
 
-1619980184 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\stringutils.cpp
+1633876986 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\stringutils.cpp
 	"StringUtils.hpp"
 
 1620383924 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\operationstructs.cpp
 
 1620383946 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\parser.cpp
 
-1633863576 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\parser.hpp
+1633863750 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\parser.hpp
 	"ParseResult.hpp"
 
 1620386811 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\operationstructs.hpp
@@ -85,4 +85,18 @@
 1633856973 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\parseresult.hpp
 	"Error.hpp"
 	"OperationTree.hpp"
+
+1633875600 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\interpreter.cpp
+	"Interpreter.hpp"
+
+1633885918 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\interpreter.hpp
+	"OperationTree.hpp"
+	"Number.hpp"
+
+1633875957 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\number.cpp
+	"Number.hpp"
+
+1633883305 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\number.hpp
+	"Position.hpp"
+	"StringUtils.hpp"
 

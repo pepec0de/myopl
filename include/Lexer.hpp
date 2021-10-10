@@ -4,7 +4,6 @@
 #include <iostream>
 #include <vector>
 
-#include "Constants.hpp"
 #include "Token.hpp"
 #include "Error.hpp"
 #include "Errors.hpp"
