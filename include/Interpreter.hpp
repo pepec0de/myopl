@@ -3,6 +3,7 @@
 
 #include "OperationTree.hpp"
 #include "Number.hpp"
+#include "RuntimeResult.hpp"
 
 class Interpreter {
     public:
@@ -12,7 +13,7 @@ class Interpreter {
             return "BinOpNode";
         }
 
-        Number visit(Node* node) {
+        RuntimeResult visit(Node* node) {
             string methodName = getMethodName(node);
             if (methodName == "NumberNode") {
                 return visit_NumberNode(node);
@@ -23,17 +24,24 @@ class Interpreter {
             }
         }
 
-        Number visit_NumberNode(Node* node) {
-            Number result(stof(node->data.getValue()));
-            result.setNumberPosition(node->data.getPosStart(), node->data.getPosEnd());
-            return result;
+        RuntimeResult visit_NumberNode(Node* node) {
+            Number number(stof(node->data.getValue()));
+            number.setNumberPosition(node->data.getPosStart(), node->data.getPosEnd());
+
+            RuntimeResult result;
+            return result.success(number);
         }
 
-        Number visit_BinaryOpNode(Node* node) {
-            Number left = visit(node->left);
-            Number right = visit(node->right);
+        RuntimeResult visit_BinaryOpNode(Node* node) {
+            RuntimeResult res;
+            Number left = res.mRegister(visit(node->left));
+            if (res.getError().isError()) return res;
+            Number right = res.mRegister(visit(node->right));
+            if (res.getError().isError()) return res;
 
             Number result;
+            /// TODO: Solucionar como capturamos el error aqui
+            Error divError;
             switch (node->data.getTokenType()) {
             case TT_PLUS:
                 result = left.addedTo(right);
@@ -45,23 +53,29 @@ class Interpreter {
                 result = left.multedBy(right);
                 break;
             case TT_DIV:
-                result = left.divedBy(right);
+                result = left.divedBy(right, divError);
                 break;
             default:
                 cout << "visit_BinaryOpNode() cant handle operation token: " << node->data.as_string() << endl;
             }
 
+            if (divError.isError()) return res.failure(divError);
+            // else
             result.setNumberPosition(node->data.getPosStart(), node->data.getPosStart());
-            return result;
+            return res.success(result);
         }
 
-        Number visit_UnaryOpNode(Node* node) {
-            Number number = visit(node->left);
+        RuntimeResult visit_UnaryOpNode(Node* node) {
+            RuntimeResult res;
+            Number number = res.mRegister(visit(node->left));
+            if (res.getError().isError()) return res;
+
             Number result;
             if (node->data.getTokenType() == TT_MINUS) {
                 result = number.multedBy(Number(-1));
             }
-            return result;
+            result.setNumberPosition(node->data.getPosStart(), node->data.getPosEnd());
+            return res.success(result);
         }
 
         // Returns true if node contains number

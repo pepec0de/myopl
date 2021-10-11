@@ -44,6 +44,7 @@
 		<Unit filename="include/ParseResult.hpp" />
 		<Unit filename="include/Parser.hpp" />
 		<Unit filename="include/Position.hpp" />
+		<Unit filename="include/RuntimeResult.hpp" />
 		<Unit filename="include/StringUtils.hpp" />
 		<Unit filename="include/Token.hpp" />
 		<Unit filename="include/UINT1024.hpp" />
@@ -56,6 +57,7 @@
 		<Unit filename="src/ParseResult.cpp" />
 		<Unit filename="src/Parser.cpp" />
 		<Unit filename="src/Position.cpp" />
+		<Unit filename="src/RuntimeResult.cpp" />
 		<Unit filename="src/StringUtils.cpp" />
 		<Unit filename="src/Token.cpp" />
 		<Unit filename="src/UINT1024.cpp" />

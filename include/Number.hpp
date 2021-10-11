@@ -3,8 +3,9 @@
 
 #include "Position.hpp"
 #include "StringUtils.hpp"
+#include "Errors.hpp"
 
-typedef long long TNumber;
+typedef long double TNumber;
 
 class Number
 {
@@ -40,11 +41,18 @@ class Number
             return result;
         }
 
-        Number divedBy(Number other) {
-            Number result(value / other.getValue());
-            return result;
+        Number divedBy(Number other, Error &error) {
+            if (other.getValue() == 0) {
+                error = RuntimeError(other.getPosStart(), other.getPosEnd(), "Division by zero");
+                return *this;
+            } else {
+                Number result(value / other.getValue());
+                return result;
+            }
         }
 
+        Position getPosStart() { return posStart; }
+        Position getPosEnd() { return posEnd; }
         string as_string() {
             return strUtils.tostring(value);
         }

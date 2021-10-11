@@ -27,6 +27,8 @@ class StringUtils {
         string tostring(long double value);
         string tostring(long long value);
         string tostring(char value);
+
+        /// TODO: string witharrow(int start, int end);
 };
 
 #endif // STRINGUTILS_HPP

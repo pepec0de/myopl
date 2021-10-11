@@ -26,28 +26,15 @@ class ParseResult
 
         ParseResult success(Node* pNode) {
             node = pNode;
-
-            ParseResult copia;
-            copia.setNode(getNode());
-            copia.setError(getError());
-            return getCopia();
+            return *this;
         }
 
         ParseResult failure(Error pError) {
             error = pError;
-            return getCopia();
+            return *this;
         }
 
-        ParseResult getCopia() {
-            ParseResult copia;
-            copia.setNode(getNode());
-            copia.setError(getError());
-            return copia;
-        }
-
-        void setError(Error pError) { error = pError; }
         Error getError() { return error; }
-        void setNode(Node* pNode) { node = pNode; }
         Node* getNode() { return node; }
 
 };

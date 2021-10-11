@@ -1,3 +1,6 @@
+#ifndef ERRORS_HPP
+#define ERRORS_HPP
+
 #include "Error.hpp"
 #include "Position.hpp"
 
@@ -15,3 +18,10 @@ class MemoryError : public Error {
     public:
         MemoryError() : Error("CRITICAL ERROR: Out of memory!!") {}
 };
+
+class RuntimeError : public Error {
+    public:
+        RuntimeError(Position posStart, Position posEnd, string details) : Error("Runtime Error", posStart, posEnd, details) {}
+};
+
+#endif // ERRORS_HPP

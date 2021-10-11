@@ -31,8 +31,12 @@ void run(string text) {
             ast.setRootNode(resultAST.getNode());
             cout << ast.as_string() << endl;
             Interpreter interpreter;
-            Number result = interpreter.visit(ast.getRootNode());
-            cout << result.getValue() << endl;
+            RuntimeResult result = interpreter.visit(ast.getRootNode());
+            if (result.getError().isError()) {
+                cout << result.getError().as_string() << endl;
+            } else {
+                cout << result.getValue().getValue() << endl;
+            }
         }
     } else {
         cout << error.as_string();
