@@ -6,17 +6,17 @@
 
 #include "Position.hpp"
 #include "StringUtils.hpp"
+#include "Context.hpp"
 
 using namespace std;
 
 class Error {
 
-private:
+protected:
     string errorName;
     string details;
     Position posStart;
     Position posEnd;
-
     StringUtils strUtils;
 
 public:
@@ -40,11 +40,15 @@ public:
         return errorName != "";
     }
 
+    string getErrorName() { return errorName; }
+
     string as_string() {
+        cout << "as_string() Error.hpp\n";
         string result = errorName + " : " + details + "\n File " + posStart.getFilename()
                         + ", line " + strUtils.tostring(posStart.getLn() + 1) + "\n";
         return result;
     }
+
 };
 
 #endif // ERROR_HPP

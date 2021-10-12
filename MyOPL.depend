@@ -19,7 +19,7 @@
 	<iostream>
 	"Position.hpp"
 
-1633969173 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\main.cpp
+1634038601 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\main.cpp
 	<iostream>
 	"Lexer.hpp"
 	"Parser.hpp"
@@ -28,11 +28,12 @@
 1619951702 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\error.cpp
 	"Error.hpp"
 
-1633780551 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\error.hpp
+1634038901 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\error.hpp
 	<iostream>
 	<string>
 	"Position.hpp"
 	"StringUtils.hpp"
+	"Context.hpp"
 
 1619951855 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\illegalcharerror.cpp
 	"IllegalCharError.hpp"
@@ -75,9 +76,10 @@
 	"StringUtils.hpp"
 	"Token.hpp"
 
-1633968493 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\errors.hpp
-	"Error.hpp"
+1634038907 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\errors.hpp
 	"Position.hpp"
+	"Context.hpp"
+	"Error.hpp"
 
 1633778487 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\parseresult.cpp
 	"ParseResult.hpp"
@@ -89,18 +91,20 @@
 1633875600 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\interpreter.cpp
 	"Interpreter.hpp"
 
-1633967988 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\interpreter.hpp
+1634037449 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\interpreter.hpp
 	"OperationTree.hpp"
 	"Number.hpp"
 	"RuntimeResult.hpp"
+	"Context.hpp"
 
 1633875957 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\number.cpp
 	"Number.hpp"
 
-1633969365 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\number.hpp
+1634038816 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\number.hpp
 	"Position.hpp"
 	"StringUtils.hpp"
 	"Errors.hpp"
+	"Context.hpp"
 
 1633887217 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\uint1024.cpp
 	"UINT1024.hpp"
@@ -119,7 +123,14 @@
 1633943046 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\runtimeresult.cpp
 	"RuntimeResult.hpp"
 
-1633943552 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\runtimeresult.hpp
+1634037365 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\runtimeresult.hpp
 	"Number.hpp"
 	"Error.hpp"
+
+1634033905 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\context.cpp
+	"Context.hpp"
+
+1634034244 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\context.hpp
+	<iostream>
+	"Position.hpp"
 

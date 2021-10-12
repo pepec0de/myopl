@@ -35,6 +35,7 @@
 			<Add option="-fexceptions" />
 		</Compiler>
 		<Unit filename="grammar.txt" />
+		<Unit filename="include/Context.hpp" />
 		<Unit filename="include/Error.hpp" />
 		<Unit filename="include/Errors.hpp" />
 		<Unit filename="include/Interpreter.hpp" />
@@ -49,6 +50,7 @@
 		<Unit filename="include/Token.hpp" />
 		<Unit filename="include/UINT1024.hpp" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/Context.cpp" />
 		<Unit filename="src/Error.cpp" />
 		<Unit filename="src/Interpreter.cpp" />
 		<Unit filename="src/Lexer.cpp" />

@@ -31,7 +31,9 @@ void run(string text) {
             ast.setRootNode(resultAST.getNode());
             cout << ast.as_string() << endl;
             Interpreter interpreter;
-            RuntimeResult result = interpreter.visit(ast.getRootNode());
+            Context context("<program>");
+            RuntimeResult result = interpreter.visit(ast.getRootNode(), context);
+
             if (result.getError().isError()) {
                 cout << result.getError().as_string() << endl;
             } else {
@@ -49,9 +51,9 @@ int main() {
     string cmdStr;
     input(cmdStr);
     run(cmdStr);
-    do {
+    while(cmdStr != "q") {
         input(cmdStr);
         run(cmdStr);
-    } while(cmdStr != "q");
+    }
     return 0;
 }

@@ -4,6 +4,7 @@
 #include "OperationTree.hpp"
 #include "Number.hpp"
 #include "RuntimeResult.hpp"
+#include "Context.hpp"
 
 class Interpreter {
     public:
@@ -13,34 +14,34 @@ class Interpreter {
             return "BinOpNode";
         }
 
-        RuntimeResult visit(Node* node) {
+        RuntimeResult visit(Node* node, Context context) {
             string methodName = getMethodName(node);
             if (methodName == "NumberNode") {
-                return visit_NumberNode(node);
+                return visit_NumberNode(node, context);
             } else if (methodName == "UnaryOpNode") {
-                return visit_UnaryOpNode(node);
+                return visit_UnaryOpNode(node, context);
              } else { // "BinaryOpNode"
-                return visit_BinaryOpNode(node);
+                return visit_BinaryOpNode(node, context);
             }
         }
 
-        RuntimeResult visit_NumberNode(Node* node) {
+        RuntimeResult visit_NumberNode(Node* node, Context context) {
             Number number(stof(node->data.getValue()));
             number.setNumberPosition(node->data.getPosStart(), node->data.getPosEnd());
+            number.setContext(context);
 
             RuntimeResult result;
             return result.success(number);
         }
 
-        RuntimeResult visit_BinaryOpNode(Node* node) {
+        RuntimeResult visit_BinaryOpNode(Node* node, Context context) {
             RuntimeResult res;
-            Number left = res.mRegister(visit(node->left));
+            Number left = res.mRegister(visit(node->left, context));
             if (res.getError().isError()) return res;
-            Number right = res.mRegister(visit(node->right));
+            Number right = res.mRegister(visit(node->right, context));
             if (res.getError().isError()) return res;
 
             Number result;
-            /// TODO: Solucionar como capturamos el error aqui
             Error divError;
             switch (node->data.getTokenType()) {
             case TT_PLUS:
@@ -65,9 +66,9 @@ class Interpreter {
             return res.success(result);
         }
 
-        RuntimeResult visit_UnaryOpNode(Node* node) {
+        RuntimeResult visit_UnaryOpNode(Node* node, Context context) {
             RuntimeResult res;
-            Number number = res.mRegister(visit(node->left));
+            Number number = res.mRegister(visit(node->left, context));
             if (res.getError().isError()) return res;
 
             Number result;
