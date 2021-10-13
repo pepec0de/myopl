@@ -13,6 +13,7 @@ enum TokenType {
     TT_MINUS,
     TT_MUL,
     TT_DIV,
+    TT_POW,
     TT_LPAREN,
     TT_RPAREN,
     TT_EOF
@@ -78,11 +79,15 @@ public:
         case TT_DIV:
             return "TT_DIV";
 
+        case TT_POW:
+            return "TT_POW";
+
         case TT_LPAREN:
             return "TT_LPAREN";
 
         case TT_RPAREN:
             return "TT_RPAREN";
+
         case TT_EOF:
             return "TT_EOF";
         }

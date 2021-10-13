@@ -6,7 +6,6 @@
 
 #include "Position.hpp"
 #include "StringUtils.hpp"
-#include "Context.hpp"
 
 using namespace std;
 
@@ -43,7 +42,7 @@ public:
     string getErrorName() { return errorName; }
 
     string as_string() {
-        cout << "as_string() Error.hpp\n";
+        if (errorName == "Runtime Error") return "";
         string result = errorName + " : " + details + "\n File " + posStart.getFilename()
                         + ", line " + strUtils.tostring(posStart.getLn() + 1) + "\n";
         return result;

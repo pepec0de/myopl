@@ -57,6 +57,12 @@ class Number
             }
         }
 
+        Number toPowerOf(Number other) {
+            Number result(value ^ other.getValue());
+            result.setContext(context);
+            return result;
+        }
+
         Number setContext(Context pContext) {
             context = pContext;
             return *this;

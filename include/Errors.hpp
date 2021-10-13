@@ -23,24 +23,26 @@ class MemoryError : public Error {
 class RuntimeError : public Error {
     Context context;
     public:
-        RuntimeError(Position posStart, Position posEnd, string details, Context pContext) : Error("Runtime Error", posStart, posEnd, details) { context = pContext; }
+        RuntimeError(Position posStart, Position posEnd, string details, Context pContext) : Error("Runtime Error", posStart, posEnd, details) {
+            context = pContext;
+            cout << as_string() << endl;
+        }
 
         string generateTraceback() {
-            cout << "generateTraceback()\n";
-            string result = "";
+            string result = "\n";
             Position pos = posStart;
+
             Context ctx = context;
 
-            do {
+            while (ctx.getDisplayName() != "") {
                 result = "\tFile " + pos.getFilename() + ", line " + strUtils.tostring(pos.getLn() + 1) + ", in " + ctx.getDisplayName() + "\n" + result;
                 pos = ctx.getParentEntryPos();
                 ctx = ctx.getParent();
-            } while (ctx.getDisplayName() != "<program>");
+            }
             return "Traceback (most recent call last):\n" + result;
         }
 
         string as_string() {
-            cout << "as_string() override" << endl;
             string result = generateTraceback();
             result += errorName + " : " + details + "\n";
             return result;
