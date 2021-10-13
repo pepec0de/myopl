@@ -20,27 +20,14 @@ class Parser {
             }
         }
 
-        ParseResult factor() {
+        ParseResult atom() {
             ParseResult res;
             Token tok = currTok;
 
-            Node* result = new Node;
-            if (result == NULL) return res.failure(MemoryError());
-
-            result->left = NULL;
-            result->right = NULL;
-
-            if (tok.getTokenType() == TT_PLUS ||tok.getTokenType() == TT_MINUS) {
-                // res.register(advance());
-                advance();
-                Node* factorNode = res.mRegister(factor());
-                if (res.getError().isError()) {
-                    return res;
-                }
-                result->data = tok;
-                result->left = factorNode;
-                return res.success(result);
-            } else if (tok.getTokenType() == TT_INT || tok.getTokenType() == TT_FLOAT) {
+            if (tok.getTokenType() == TT_INT || tok.getTokenType() == TT_FLOAT) {
+                Node* result = new Node;
+                result->left = NULL;
+                result->right = NULL;
                 // res.register(advance());
                 advance();
                 result->data = tok;
@@ -60,7 +47,34 @@ class Parser {
                     return res.failure(InvalidSyntaxError(currTok.getPosStart(), currTok.getPosEnd(), "Expected \')\'"));
                 }
             }
+
             return res.failure(InvalidSyntaxError(tok.getPosStart(), tok.getPosEnd(), "Expected int or float"));
+        }
+
+        ParseResult power() {
+            return bin_op("atom");
+        }
+
+        ParseResult factor() {
+            ParseResult res;
+            Token tok = currTok;
+
+            if (tok.getTokenType() == TT_PLUS ||tok.getTokenType() == TT_MINUS) {
+                Node* result = new Node;
+                if (result == NULL) return res.failure(MemoryError());
+                result->left = NULL;
+                result->right = NULL;
+                // res.register(advance());
+                advance();
+                Node* factorNode = res.mRegister(factor());
+                if (res.getError().isError()) {
+                    return res;
+                }
+                result->data = tok;
+                result->left = factorNode;
+                return res.success(result);
+            }
+            return power();
         }
 
         ParseResult expr() {
@@ -76,10 +90,14 @@ class Parser {
                 tt1 = TT_MUL;
                 tt2 = TT_DIV;
                 leftNode = res.mRegister(factor());
-            } else {
+            } else if (func == "term") {
                 tt1 = TT_PLUS;
                 tt2 = TT_MINUS;
                 leftNode = res.mRegister(bin_op("factor"));
+            } else /*if (func == "atom") (avoiding warning)*/ {
+                tt1 = TT_POW;
+                tt2 = TT_NULL;
+                leftNode = res.mRegister(atom());
             }
             // Comprobamos si ParseResult ha devuelto error
             if (res.getError().isError()) {
@@ -99,7 +117,11 @@ class Parser {
                     // res.register(advance());
                     advance();
                     Node* rightNode;
-                    if (func == "factor") rightNode = res.mRegister(factor()); else rightNode = res.mRegister(bin_op("factor"));
+                    if (func == "factor" || func == "atom") {
+                        rightNode = res.mRegister(factor());
+                    } else {
+                        rightNode = res.mRegister(bin_op("factor"));
+                    }
                     if (res.getError().isError()) {
                         return res;
                     }

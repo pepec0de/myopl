@@ -7,6 +7,7 @@
 using namespace std;
 
 enum TokenType {
+    TT_NULL,
     TT_INT,
     TT_FLOAT,
     TT_PLUS,
@@ -90,8 +91,10 @@ public:
 
         case TT_EOF:
             return "TT_EOF";
+
+        default:
+            return "";
         }
-        return "";
 	}
 
 	TokenType getTokenType() {

@@ -5,6 +5,7 @@
 #include "StringUtils.hpp"
 #include "Errors.hpp"
 #include "Context.hpp"
+#include <math.h>
 
 typedef long double TNumber;
 
@@ -58,7 +59,7 @@ class Number
         }
 
         Number toPowerOf(Number other) {
-            Number result(value ^ other.getValue());
+            Number result(pow(value, other.getValue()));
             result.setContext(context);
             return result;
         }

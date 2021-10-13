@@ -2,7 +2,7 @@
 1619945148 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\lexer.cpp
 	"Lexer.hpp"
 
-1634109829 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\lexer.hpp
+1634149230 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\lexer.hpp
 	<iostream>
 	<vector>
 	"Token.hpp"
@@ -15,7 +15,7 @@
 1619945131 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\token.cpp
 	"Token.hpp"
 
-1634109869 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\token.hpp
+1634149167 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\token.hpp
 	<iostream>
 	"Position.hpp"
 
@@ -62,7 +62,7 @@
 
 1620383946 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\parser.cpp
 
-1633863750 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\parser.hpp
+1634149269 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\parser.hpp
 	"ParseResult.hpp"
 
 1620386811 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\operationstructs.hpp
@@ -90,7 +90,7 @@
 1633875600 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\interpreter.cpp
 	"Interpreter.hpp"
 
-1634037449 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\interpreter.hpp
+1634147828 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\interpreter.hpp
 	"OperationTree.hpp"
 	"Number.hpp"
 	"RuntimeResult.hpp"
@@ -99,11 +99,12 @@
 1633875957 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\number.cpp
 	"Number.hpp"
 
-1634109998 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\number.hpp
+1634147760 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\number.hpp
 	"Position.hpp"
 	"StringUtils.hpp"
 	"Errors.hpp"
 	"Context.hpp"
+	<math.h>
 
 1633887217 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\uint1024.cpp
 	"UINT1024.hpp"

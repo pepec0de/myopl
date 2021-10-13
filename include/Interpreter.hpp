@@ -47,15 +47,23 @@ class Interpreter {
             case TT_PLUS:
                 result = left.addedTo(right);
                 break;
+
             case TT_MINUS:
                 result = left.subbedBy(right);
                 break;
+
             case TT_MUL:
                 result = left.multedBy(right);
                 break;
+
             case TT_DIV:
                 result = left.divedBy(right, divError);
                 break;
+
+            case TT_POW:
+                result = left.toPowerOf(right);
+                break;
+
             default:
                 cout << "visit_BinaryOpNode() cant handle operation token: " << node->data.as_string() << endl;
             }

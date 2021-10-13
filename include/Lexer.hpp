@@ -86,6 +86,8 @@ public:
 
             case '^':
                 tokens.push_back(Token(TT_POW, "", pos));
+                advance();
+                break;
 
             case '(':
                 tokens.push_back(Token(TT_LPAREN, "", pos));
