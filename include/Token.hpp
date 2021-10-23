@@ -8,6 +8,7 @@ using namespace std;
 
 enum TokenType {
     TT_NULL,
+    TT_EOF,
     TT_INT,
     TT_FLOAT,
     TT_PLUS,
@@ -17,7 +18,10 @@ enum TokenType {
     TT_POW,
     TT_LPAREN,
     TT_RPAREN,
-    TT_EOF
+    // PROGRAMMING
+    TT_EQUALS,
+    TT_IDENTIFIER,
+    TT_KEYWORD
 };
 
 /*
@@ -92,13 +96,26 @@ public:
         case TT_EOF:
             return "TT_EOF";
 
+        case TT_IDENTIFIER:
+            return "TT_IDENTIFIER:" + value;
+
+        case TT_KEYWORD:
+            return "TT_KEYWORD:" + value;
+
+        case TT_EQUALS:
+            return "TT_EQUALS";
+
         default:
-            return "";
+            return "Unrecognised token type";
         }
 	}
 
 	TokenType getTokenType() {
         return type;
+	}
+
+	bool matches(TokenType tt, string pValue) {
+        return type == tt && value == pValue;
 	}
 };
 

@@ -10,18 +10,12 @@ void input(string &cmdStr) {
     getline(cin, cmdStr);
 }
 
-void run(string text) {
+void run(string text, Context &context) {
     Lexer lexer(text);
     Error error;
 
     vector<Token> tokens = lexer.getTokens(error);
     if (!error.isError()) {
-        cout << "[";
-        for (Token token : tokens) {
-            cout << token.as_string() << ", ";
-        }
-        cout << "]\n";
-
         Parser parser(tokens);
         ParseResult resultAST = parser.parse();
         if (resultAST.getError().isError()) {
@@ -29,11 +23,9 @@ void run(string text) {
         } else {
             OperationTree ast;
             ast.setRootNode(resultAST.getNode());
-            cout << ast.as_string() << endl;
+            cout << "AST: " << ast.as_string() << endl;
             Interpreter interpreter;
-            Context context("<program>");
             RuntimeResult result = interpreter.visit(ast.getRootNode(), context);
-
             if (result.getError().isError()) {
                 cout << result.getError().as_string() << endl;
             } else {
@@ -46,14 +38,19 @@ void run(string text) {
 }
 
 int main() {
+    SymbolTable globalST;
+    SymbolValue nullVal; nullVal.type = "number"; nullVal.value = "0";
+    globalST.append("null", nullVal);
+
+    Context context("<program>");
+    context.setSymbolTable(globalST);
 
     // String para almacenar la operacion
     string cmdStr;
     input(cmdStr);
-    run(cmdStr);
     while(cmdStr != "q") {
+        run(cmdStr, context);
         input(cmdStr);
-        run(cmdStr);
     }
     return 0;
 }

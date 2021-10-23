@@ -7,22 +7,43 @@
 #include "Context.hpp"
 
 class Interpreter {
+    private:
+        // Returns true if node contains number
+        bool isNumberNode(Node* node) {
+            return node->data.getTokenType() == TT_INT || node->data.getTokenType() == TT_FLOAT;
+        }
+
+        // Returns true if node contains + or - operator
+        bool isSymbolNode(Node* node) {
+            return node->data.getTokenType() == TT_PLUS || node->data.getTokenType() == TT_MINUS;
+        }
     public:
         string getMethodName(Node* node) {
+            // Programming methods:
+            if (node->data.getTokenType() == TT_IDENTIFIER && node->left == NULL && node->right == NULL) return "VarAccessNode";
+            if (node->data.getTokenType() == TT_IDENTIFIER && node->right == NULL) return "VarAssignNode";
+            // Arithmetic methods:
             if (isNumberNode(node)) return "NumberNode";
             if (isSymbolNode(node) && node->right == NULL) return "UnaryOpNode";
             return "BinOpNode";
         }
 
-        RuntimeResult visit(Node* node, Context context) {
+        RuntimeResult visit(Node* node, Context &context) {
             string methodName = getMethodName(node);
+            if (methodName == "VarAssignNode") {
+                return visit_VarAssignNode(node, context);
+            }
+            if (methodName == "VarAccessNode") {
+                return visit_VarAccessNode(node, context);
+            }
             if (methodName == "NumberNode") {
                 return visit_NumberNode(node, context);
-            } else if (methodName == "UnaryOpNode") {
-                return visit_UnaryOpNode(node, context);
-             } else { // "BinaryOpNode"
-                return visit_BinaryOpNode(node, context);
             }
+            if (methodName == "UnaryOpNode") {
+                return visit_UnaryOpNode(node, context);
+            }
+            // "BinaryOpNode"
+            return visit_BinaryOpNode(node, context);
         }
 
         RuntimeResult visit_NumberNode(Node* node, Context context) {
@@ -87,14 +108,30 @@ class Interpreter {
             return res.success(result);
         }
 
-        // Returns true if node contains number
-        bool isNumberNode(Node* node) {
-            return node->data.getTokenType() == TT_INT || node->data.getTokenType() == TT_FLOAT;
+        RuntimeResult visit_VarAccessNode(Node* node, Context &context) {
+            RuntimeResult res;
+            string varName = node->data.getValue();
+            SymbolValue varValue = context.getSymbolTable().get(varName);
+            if (varValue.type == "") {
+                return res.failure(RuntimeError(node->data.getPosStart(), node->data.getPosStart(), "\'" + varName + "\' is not defined", &context));
+            }
+            return res.success(Number(stof(varValue.value)));
         }
 
-        // Returns true if node contains + or - operator
-        bool isSymbolNode(Node* node) {
-            return node->data.getTokenType() == TT_PLUS || node->data.getTokenType() == TT_MINUS;
+        RuntimeResult visit_VarAssignNode(Node* node, Context &context) {
+            RuntimeResult res;
+
+            Number num = res.mRegister(visit(node->left, context));
+            if (res.getError().isError()) {
+                return res;
+            }
+
+            string varName = node->data.getValue();
+            SymbolValue varValue;
+            varValue.type = "number";
+            varValue.value = num.as_string();
+            context.getSymbolTable().append(varName, varValue);
+            return res.success(num);
         }
 };
 

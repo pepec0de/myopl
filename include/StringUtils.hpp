@@ -29,6 +29,9 @@ class StringUtils {
         string tostring(char value);
 
         /// TODO: string witharrow(int start, int end);
+
+        bool isDigit(char c);
+        bool isLetter(char c); // true -> char is in english alphabet
 };
 
 #endif // STRINGUTILS_HPP

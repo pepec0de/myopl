@@ -5,6 +5,14 @@
 
 #define DEBUG false
 
+/*
+    Clase dedicada a parsear los tokens que hemos recolectado, de manera que
+    podemos construir nuestro AST para reconocer y realizar operaciones
+    aritmeticas y reconocer tambien la declaracion o llamada de variables.
+
+    AQUI es donde se invocan todos los demas errores cuando se incumplan
+    las reglas de sintaxis y aritmeticas.
+*/
 class Parser {
 
     private:
@@ -26,12 +34,28 @@ class Parser {
 
             if (tok.getTokenType() == TT_INT || tok.getTokenType() == TT_FLOAT) {
                 Node* result = new Node;
-                result->left = NULL;
-                result->right = NULL;
+                if (result != NULL) {
+                    result->left = NULL;
+                    result->right = NULL;
+                    // res.register(advance());
+                    advance();
+                    result->data = tok;
+                    return res.success(result);
+                } else {
+                    return res.failure(MemoryError());
+                }
+            } else if (tok.getTokenType() == TT_IDENTIFIER) {
                 // res.register(advance());
                 advance();
-                result->data = tok;
-                return res.success(result);
+                Node* result = new Node;
+                if (result != NULL) {
+                    result->data = tok;
+                    result->left = NULL;
+                    result->right = NULL;
+                    return res.success(result);
+                } else {
+                    return res.failure(MemoryError());
+                }
             } else if (tok.getTokenType() == TT_LPAREN) {
                 // res.register(advance());
                 advance();
@@ -78,10 +102,47 @@ class Parser {
         }
 
         ParseResult expr() {
+            ParseResult res;
+            // Comprobamos si el usuario quiere declarar una variable
+            if (currTok.matches(TT_KEYWORD, "VAR")) {
+                /// SINTAXIS VAR <identificador> = <valor>
+                // res.register(advance());
+                advance();
+
+                if (currTok.getTokenType() != TT_IDENTIFIER) {
+                    return res.failure(InvalidSyntaxError(currTok.getPosStart(), currTok.getPosEnd(), "Expected identifier"));
+                }
+
+                // Recogemos el nombre de la variable
+                Token varToken = currTok;
+                // res.register(advance());
+                advance();
+
+                if (currTok.getTokenType() != TT_EQUALS) {
+                    return res.failure(InvalidSyntaxError(currTok.getPosStart(), currTok.getPosEnd(), "Expected \'=\'"));
+                }
+
+                // res.register(advance());
+                advance();
+
+                Node* varExpr = res.mRegister(expr());
+                if (res.getError().isError()) {
+                    return res;
+                }
+                Node* result = new Node;
+                if (result != NULL) {
+                    result->data = varToken;
+                    result->left = varExpr;
+                    result->right = NULL;
+                    return res.success(result);
+                } else {
+                    return res.failure(MemoryError());
+                }
+            }
             return bin_op("term");
         }
 
-        ParseResult bin_op(string func) { // func = "func" | func = "term"
+        ParseResult bin_op(string func) { // func = "factor" | func = "term" | func = "atom"
             ParseResult res;
             if (DEBUG) cout << "START bin_op(\"" << func << "\")\n";
             TokenType tt1, tt2;
@@ -119,7 +180,7 @@ class Parser {
                     Node* rightNode;
                     if (func == "factor" || func == "atom") {
                         rightNode = res.mRegister(factor());
-                    } else {
+                    } else { // func == "term"
                         rightNode = res.mRegister(bin_op("factor"));
                     }
                     if (res.getError().isError()) {

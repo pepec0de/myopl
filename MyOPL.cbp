@@ -12,6 +12,8 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
+					<Add option="-Wall" />
+					<Add option="-std=c++11" />
 					<Add option="-g" />
 					<Add directory="include" />
 				</Compiler>
@@ -47,6 +49,7 @@
 		<Unit filename="include/Position.hpp" />
 		<Unit filename="include/RuntimeResult.hpp" />
 		<Unit filename="include/StringUtils.hpp" />
+		<Unit filename="include/SymbolTable.hpp" />
 		<Unit filename="include/Token.hpp" />
 		<Unit filename="include/UINT1024.hpp" />
 		<Unit filename="main.cpp" />
@@ -61,6 +64,7 @@
 		<Unit filename="src/Position.cpp" />
 		<Unit filename="src/RuntimeResult.cpp" />
 		<Unit filename="src/StringUtils.cpp" />
+		<Unit filename="src/SymbolTable.cpp" />
 		<Unit filename="src/Token.cpp" />
 		<Unit filename="src/UINT1024.cpp" />
 		<Extensions>

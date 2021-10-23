@@ -2,9 +2,10 @@
 1619945148 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\lexer.cpp
 	"Lexer.hpp"
 
-1634149230 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\lexer.hpp
+1634886946 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\lexer.hpp
 	<iostream>
 	<vector>
+	<algorithm>
 	"Token.hpp"
 	"Error.hpp"
 	"Errors.hpp"
@@ -15,11 +16,11 @@
 1619945131 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\token.cpp
 	"Token.hpp"
 
-1634149167 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\token.hpp
+1634887708 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\token.hpp
 	<iostream>
 	"Position.hpp"
 
-1634038921 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\main.cpp
+1634987201 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\main.cpp
 	<iostream>
 	"Lexer.hpp"
 	"Parser.hpp"
@@ -49,20 +50,20 @@
 1633778192 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\position.hpp
 	<iostream>
 
-1633969160 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\stringutils.hpp
+1634366117 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\stringutils.hpp
 	<iostream>
 	<vector>
 	<string>
 	<sstream>
 
-1633969161 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\stringutils.cpp
+1634887487 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\stringutils.cpp
 	"StringUtils.hpp"
 
 1620383924 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\operationstructs.cpp
 
 1620383946 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\parser.cpp
 
-1634149269 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\parser.hpp
+1634888863 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\parser.hpp
 	"ParseResult.hpp"
 
 1620386811 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\operationstructs.hpp
@@ -71,11 +72,11 @@
 1633628406 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\operationtree.cpp
 	"OperationTree.hpp"
 
-1633537335 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\operationtree.hpp
+1634884247 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\operationtree.hpp
 	"StringUtils.hpp"
 	"Token.hpp"
 
-1634109576 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\errors.hpp
+1635001562 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\errors.hpp
 	"Position.hpp"
 	"Context.hpp"
 	"Error.hpp"
@@ -90,7 +91,7 @@
 1633875600 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\interpreter.cpp
 	"Interpreter.hpp"
 
-1634147828 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\interpreter.hpp
+1635001581 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\interpreter.hpp
 	"OperationTree.hpp"
 	"Number.hpp"
 	"RuntimeResult.hpp"
@@ -99,7 +100,7 @@
 1633875957 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\number.cpp
 	"Number.hpp"
 
-1634147760 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\number.hpp
+1634885370 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\number.hpp
 	"Position.hpp"
 	"StringUtils.hpp"
 	"Errors.hpp"
@@ -130,7 +131,15 @@
 1634033905 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\context.cpp
 	"Context.hpp"
 
-1634034244 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\context.hpp
+1634926809 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\context.hpp
 	<iostream>
 	"Position.hpp"
+	"SymbolTable.hpp"
+
+1634545005 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\symboltable.cpp
+	"SymbolTable.hpp"
+
+1635001100 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\symboltable.hpp
+	<iostream>
+	<map>
 

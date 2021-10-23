@@ -49,7 +49,7 @@ class Number
 
         Number divedBy(Number other, Error &error) {
             if (other.getValue() == 0) {
-                error = RuntimeError(other.getPosStart(), other.getPosEnd(), "Division by zero", context);
+                error = RuntimeError(other.getPosStart(), other.getPosEnd(), "Division by zero", &context);
                 return *this;
             } else {
                 Number result(value / other.getValue());
@@ -74,5 +74,4 @@ class Number
             return strUtils.tostring(value);
         }
 };
-
 #endif // NUMBER_HPP

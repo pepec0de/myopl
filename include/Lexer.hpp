@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <vector>
-
+#include <algorithm>
 #include "Token.hpp"
 #include "Error.hpp"
 #include "Errors.hpp"
@@ -11,7 +11,13 @@
 
 using namespace std;
 
+/*
+    Clase dedicada para hacer las operaciones de identificacion de tokens
+    y reconocimiento del error de CARACTERES ILEGALES.
+    Funcion principal -> getTokens()
+*/
 class Lexer {
+
 private:
     string filename;
     // Instruccion(es)
@@ -20,6 +26,8 @@ private:
 	Position pos;
 	// caracter actual
 	char currChar;
+	StringUtils strUtils;
+	vector<string> keywords;
 
 	/*
         Metodo para el avance del caracter actual
@@ -30,98 +38,96 @@ private:
 	}
 
 public:
-    Lexer(string pText) {
-        filename = "<stdin>";
-        pos = Position(-1, 0, -1, filename, pText);
-        text = pText;
-        currChar = '\0';
+
+    Lexer(string pContent, string pFileName = "<stdin>") {
+        initKeywords();
+        filename = pFileName;
+	    pos = Position(-1, 0, -1, pFileName, pContent);
+		text = pContent;
+		currChar = '\0';
 		advance();
     }
 
-	Lexer(string pFileName, string pFileContent) {
-	    filename = pFileName;
-	    pos = Position(-1, 0, -1, pFileName, pFileContent);
-		text = pFileContent;
-		currChar = '\0';
-		advance();
-	}
+    void initKeywords() {
+        keywords.push_back("VAR");
+    }
 
 	/*
         Metodo para analizar cada caracter de la instruccion/texto que queremos
-        interpretar, cada caracter, si esta dentro de nuestras reglas lo vamos a
-        almacenar como un token en un vector de estos.
-        Este metodo nos sirve para la identificacion de errores y la de
-        instrucciones o operadores.
+        interpretar, cada caracter o conjunto de caracteres, si esta dentro de
+        nuestras reglas (no incumple ningun error) lo vamos a almacenar como
+        un token en un vector de estos.
 	*/
 	vector<Token> getTokens(Error &error) {
 		vector<Token> tokens;
 		string errorDetails = "";
 
 		while (currChar != '\0') {
-			switch (currChar) {
-            case ' ':
-            case '\t':
-                advance();
-                break;
-
-            case '+':
-                tokens.push_back(Token(TT_PLUS, "", pos));
-                advance();
-                break;
-
-            case '-':
-                tokens.push_back(Token(TT_MINUS, "", pos));
-                advance();
-                break;
-
-            case '*':
-                tokens.push_back(Token(TT_MUL, "", pos));
-                advance();
-                break;
-
-            case '/':
-                tokens.push_back(Token(TT_DIV, "", pos));
-                advance();
-                break;
-
-            case '^':
-                tokens.push_back(Token(TT_POW, "", pos));
-                advance();
-                break;
-
-            case '(':
-                tokens.push_back(Token(TT_LPAREN, "", pos));
-                advance();
-                break;
-
-            case ')':
-                tokens.push_back(Token(TT_RPAREN, "", pos));
-                advance();
-                break;
-
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
+            if (strUtils.isDigit(currChar)) {
                 tokens.push_back(getNumber());
-            break;
+            } else if (strUtils.isLetter(currChar)) {
+                tokens.push_back(getWord());
+            } else {
+                switch (currChar) {
+                // Ignoramos espacios y sangrias (NO COMO PYTHON >:( )
+                case ' ':
+                case '\t':
+                    advance();
+                    break;
 
-            default: {
-                // ERROR
-                Position posStart;
-                posStart = pos;
-                errorDetails.push_back('\'');
-                errorDetails.push_back(currChar);
-                errorDetails.push_back('\'');
-                advance();
-                error = IllegalCharError(posStart, pos, errorDetails);
-            }
+                /// MATH
+                case '+':
+                    tokens.push_back(Token(TT_PLUS, "", pos));
+                    advance();
+                    break;
+
+                case '-':
+                    tokens.push_back(Token(TT_MINUS, "", pos));
+                    advance();
+                    break;
+
+                case '*':
+                    tokens.push_back(Token(TT_MUL, "", pos));
+                    advance();
+                    break;
+
+                case '/':
+                    tokens.push_back(Token(TT_DIV, "", pos));
+                    advance();
+                    break;
+
+                case '^':
+                    tokens.push_back(Token(TT_POW, "", pos));
+                    advance();
+                    break;
+
+                case '(':
+                    tokens.push_back(Token(TT_LPAREN, "", pos));
+                    advance();
+                    break;
+
+                case ')':
+                    tokens.push_back(Token(TT_RPAREN, "", pos));
+                    advance();
+                    break;
+
+                /// PROGRAMMING
+                case '=':
+                    tokens.push_back(Token(TT_EQUALS, "", pos));
+                    advance();
+                    break;
+
+                default: {
+                    // ERROR
+                    Position posStart;
+                    posStart = pos;
+                    errorDetails.push_back('\'');
+                    errorDetails.push_back(currChar);
+                    errorDetails.push_back('\'');
+                    advance();
+                    error = IllegalCharError(posStart, pos, errorDetails);
+                }
+                }
             }
 		}
 
@@ -155,6 +161,30 @@ public:
         } else {
             return Token(TT_FLOAT, num_str, posStart, pos);
         }
+	}
+
+	/*
+        Funcion que se encarga de recoger una palabra entera la primera vez
+        que se encuentra un caracter alfabetico. Con esto recogemos las
+        keywords de nuestro lenguaje de programacion y nombres declarados por
+        el usuario.
+	*/
+	Token getWord() {
+        string idStr = "";
+        Position posStart = pos;
+
+        while (currChar != '\0' && (strUtils.isDigit(currChar) || strUtils.isLetter(currChar) || currChar == '_')) {
+            idStr.push_back(currChar);
+            advance();
+        }
+
+        TokenType tt;
+        if (find(keywords.begin(), keywords.end(), idStr) != keywords.end()) {
+            tt = TT_KEYWORD;
+        } else {
+            tt = TT_IDENTIFIER;
+        }
+        return Token(tt, idStr, posStart, pos);
 	}
 
 };

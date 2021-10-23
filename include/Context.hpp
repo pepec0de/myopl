@@ -3,42 +3,35 @@
 
 #include <iostream>
 #include "Position.hpp"
+#include "SymbolTable.hpp"
 
 using namespace std;
 
 class Context {
     private:
         string displayName;
-        // Context parent;
-        string parentDisplayName;
-        Position parentParentEntryPos;
+        Context* parent = NULL;
         Position parentEntryPos;
+        SymbolTable symbolTable;
 
     public:
         Context() {
             displayName = "";
         }
 
-        Context(string pDisplayName, /*Context pParent*/ string pParentDisplayName = "", Position pParentParentEntryPos = Position(), Position pParentEntryPos = Position()) {
+        Context(string pDisplayName, Context* pParent = NULL, Position pParentEntryPos = Position()) {
             displayName = pDisplayName;
-            parentDisplayName = pParentDisplayName;
-            parentParentEntryPos = pParentParentEntryPos;
+            parent = pParent;
             parentEntryPos = pParentEntryPos;
         }
 
         string getDisplayName() { return displayName; }
 
-        Context getParent() {
-            Context result;
-            result.setDisplayName(parentDisplayName);
-            result.setParentEntryPos(parentParentEntryPos);
-            return result;
-        }
+        Context* getParent() { return parent; }
 
         Position getParentEntryPos() { return parentEntryPos; }
-
-        void setDisplayName(string value) { parentDisplayName = value; }
-        void setParentEntryPos(Position pos) { parentEntryPos = pos; }
+        SymbolTable & getSymbolTable() { return symbolTable; }
+        void setSymbolTable(SymbolTable pSymbolTable) { symbolTable = pSymbolTable; }
 };
 
 #endif // CONTEXT_HPP

@@ -10,6 +10,8 @@ struct Node {
     Token data;
     Node *left;
     Node *right;
+    Position posStart;
+    Position posEnd;
 };
 
 class OperationTree {
