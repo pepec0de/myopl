@@ -100,12 +100,12 @@ class Interpreter {
             Number number = res.mRegister(visit(node->left, context));
             if (res.getError().isError()) return res;
 
-            Number result;
             if (node->data.getTokenType() == TT_MINUS) {
-                result = number.multedBy(Number(-1));
+                number = number.multedBy(Number(-1));
             }
-            result.setNumberPosition(node->data.getPosStart(), node->data.getPosEnd());
-            return res.success(result);
+
+            number.setNumberPosition(node->data.getPosStart(), node->data.getPosEnd());
+            return res.success(number);
         }
 
         RuntimeResult visit_VarAccessNode(Node* node, Context &context) {

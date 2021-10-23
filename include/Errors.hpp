@@ -25,11 +25,11 @@ class RuntimeError : public Error {
     public:
         RuntimeError(Position posStart, Position posEnd, string details, Context* pContext) : Error("Runtime Error", posStart, posEnd, details) {
             context = pContext;
-            cout << as_string() << endl;
+            cout << generateTraceback() << endl;
         }
 
         string generateTraceback() {
-            string result = "\n";
+            string result;
             Position pos = posStart;
 
             Context* ctx = context;
@@ -40,12 +40,6 @@ class RuntimeError : public Error {
                 if (ctx == NULL) break;
             }
             return "Traceback (most recent call last):\n" + result;
-        }
-
-        string as_string() {
-            string result = generateTraceback();
-            result += errorName + " : " + details + "\n";
-            return result;
         }
 };
 

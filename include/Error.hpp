@@ -41,10 +41,20 @@ public:
 
     string getErrorName() { return errorName; }
 
+    string stringWarrows(string text, Position start, Position end) {
+        string result = "\t" + text + "\n\t";
+        for (int i = 0; i < start.getIdx(); i++) result += " ";
+        for (int i = 0; i < end.getIdx() - start.getIdx(); i++) result += "^";
+        return result;
+    }
+
     string as_string() {
-        if (errorName == "Runtime Error") return "";
-        string result = errorName + " : " + details + "\n File " + posStart.getFilename()
-                        + ", line " + strUtils.tostring(posStart.getLn() + 1) + "\n";
+        string result = errorName
+            + " : " + details
+            + "\n File "
+            + posStart.getFilename()
+            + ", line " + strUtils.tostring(posStart.getLn() + 1)
+            + "\n\n" + stringWarrows(posStart.getFileContent(), posStart, posEnd) + "\n";
         return result;
     }
 
