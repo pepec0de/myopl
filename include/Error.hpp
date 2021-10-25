@@ -44,7 +44,7 @@ public:
     string stringWarrows(string text, Position start, Position end) {
         string result = "\t" + text + "\n\t";
         for (int i = 0; i < start.getIdx(); i++) result += " ";
-        for (int i = 0; i < end.getIdx() - start.getIdx(); i++) result += "^";
+        for (int i = 0; i <= end.getIdx() - start.getIdx(); i++) result += "^";
         return result;
     }
 

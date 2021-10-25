@@ -139,7 +139,11 @@ class Parser {
                     return res.failure(MemoryError());
                 }
             }
-            return bin_op("term");
+            Node* node = res.mRegister(bin_op("term"));
+            if (res.getError().isError()) {
+                return res.failure(InvalidSyntaxError(currTok.getPosStart(), currTok.getPosEnd(), "Expected \'VAR\', int, float, identifier, \'+\', \'-\' or \'(\'"));
+            }
+            return res.success(node);
         }
 
         ParseResult bin_op(string func) { // func = "factor" | func = "term" | func = "atom"

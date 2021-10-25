@@ -9,6 +9,7 @@ using namespace std;
 enum TokenType {
     TT_NULL,
     TT_EOF,
+    // ARITH
     TT_INT,
     TT_FLOAT,
     TT_PLUS,
@@ -21,7 +22,14 @@ enum TokenType {
     // PROGRAMMING
     TT_EQUALS,
     TT_IDENTIFIER,
-    TT_KEYWORD
+    TT_KEYWORD,
+    // LOGIC OPERATORS
+    TT_NOTEQ, // !=
+    TT_EQEQ, // ==
+    TT_LESST, // <
+    TT_GREATT, // >
+    TT_LESSTEQ, // <=
+    TT_GREATTEQ, // >=
 };
 
 /*
@@ -66,6 +74,9 @@ public:
     Position getPosEnd() { return posEnd; }
     string as_string() {
         switch(type) {
+        case TT_EOF:
+            return "TT_EOF";
+
         case TT_INT:
             return "TT_INT:" + value;
 
@@ -93,8 +104,8 @@ public:
         case TT_RPAREN:
             return "TT_RPAREN";
 
-        case TT_EOF:
-            return "TT_EOF";
+        case TT_EQUALS:
+            return "TT_EQUALS";
 
         case TT_IDENTIFIER:
             return "TT_IDENTIFIER:" + value;
@@ -102,8 +113,20 @@ public:
         case TT_KEYWORD:
             return "TT_KEYWORD:" + value;
 
-        case TT_EQUALS:
-            return "TT_EQUALS";
+        case TT_NOTEQ:
+            return "TT_NOTEQ";
+
+        case TT_LESST:
+            return "TT_LESST";
+
+        case TT_GREATT:
+            return "TT_GREATT";
+
+        case TT_LESSTEQ:
+            return "TT_LESSTEQ";
+
+        case TT_GREATTEQ:
+            return "TT_GREATTEQ";
 
         default:
             return "Unrecognised token type";

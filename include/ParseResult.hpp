@@ -21,6 +21,7 @@ class ParseResult
         }
 
         Node* mRegister(Node* res) {
+            node = res;
             return res;
         }
 

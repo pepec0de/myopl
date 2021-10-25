@@ -43,4 +43,9 @@ class RuntimeError : public Error {
         }
 };
 
+class ExpectedCharError : public Error {
+    public:
+        ExpectedCharError(Position posStart, Position posEnd, string details) : Error("Expected Char", posStart, posEnd, details) {}
+};
+
 #endif // ERRORS_HPP

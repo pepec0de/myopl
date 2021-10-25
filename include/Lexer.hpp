@@ -50,6 +50,9 @@ public:
 
     void initKeywords() {
         keywords.push_back("VAR");
+        keywords.push_back("AND");
+        keywords.push_back("OR");
+        keywords.push_back("NOT");
     }
 
 	/*
@@ -111,10 +114,25 @@ public:
                     advance();
                     break;
 
-                /// PROGRAMMING
+                /// LOGIC
+                case '!': {
+                    Token tok = getNotEquals(error);
+                    if (error.isError()) {
+                        return tokens;
+                    }
+                    tokens.push_back(tok);
+                    }break;
+
                 case '=':
-                    tokens.push_back(Token(TT_EQUALS, "", pos));
-                    advance();
+                    tokens.push_back(getEquals());
+                    break;
+
+                case '<':
+                    tokens.push_back(getLesst());
+                    break;
+
+                case '>':
+                    tokens.push_back(getGreatt());
                     break;
 
                 default: {
@@ -185,6 +203,51 @@ public:
             tt = TT_IDENTIFIER;
         }
         return Token(tt, idStr, posStart, pos);
+	}
+
+	Token getNotEquals(Error &error) {
+        Position posStart = pos;
+        advance();
+        if (currChar == '=') {
+            advance();
+            return Token(TT_NOTEQ, "", posStart, pos);
+        }
+        advance();
+        error = ExpectedCharError(posStart, pos, "\'=\' (after \'!\')");
+        return Token(TT_NULL, "", posStart, pos);
+	}
+
+	Token getEquals() {
+	    TokenType tt = TT_EQUALS;
+        Position posStart = pos;
+        advance();
+        if (currChar == '=') {
+            advance();
+            tt = TT_EQEQ;
+        }
+        return Token(tt, "", posStart, pos);
+	}
+
+	Token getLesst() {
+        TokenType tt = TT_LESST;
+        Position posStart = pos;
+        advance();
+        if (currChar == '=') {
+            advance();
+            tt = TT_LESSTEQ;
+        }
+        return Token(tt, "", posStart, pos);
+	}
+
+	Token getGreatt() {
+        TokenType tt = TT_GREATT;
+        Position posStart = pos;
+        advance();
+        if (currChar == '=') {
+            advance();
+            tt = TT_GREATTEQ;
+        }
+        return Token(tt, "", posStart, pos);
 	}
 
 };

@@ -49,7 +49,7 @@ int main() {
     string cmdStr;
     input(cmdStr);
     while(cmdStr != "q") {
-        run(cmdStr, context);
+        if (cmdStr != "") run(cmdStr, context);
         input(cmdStr);
     }
     return 0;
