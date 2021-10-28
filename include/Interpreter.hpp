@@ -85,6 +85,39 @@ class Interpreter {
                 result = left.toPowerOf(right);
                 break;
 
+            case TT_EQEQ: // ==
+                result = left.getCompEqual(right);
+                break;
+
+            case TT_NOTEQ: // !=
+                result = left.getCompNotEqual(right);
+                break;
+
+            case TT_LESST: // <
+                result = left.getCompLesst(right);
+                break;
+
+            case TT_GREATT: // >
+                result = left.getCompGreatt(right);
+                break;
+
+            case TT_LESSTEQ: // <=
+                result = left.getCompLessEqualt(right);
+                break;
+
+            case TT_GREATTEQ: // >=
+                result = left.getCompGreatEqualt(right);
+                break;
+
+            case TT_KEYWORD:
+                if (node->data.getValue() == "AND") {
+                    result = left.getCompAND(right);
+                    break;
+                } else if (node->data.getValue() == "OR") {
+                    result = left.getCompOR(right);
+                    break;
+                }
+
             default:
                 cout << "visit_BinaryOpNode() cant handle operation token: " << node->data.as_string() << endl;
             }

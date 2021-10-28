@@ -113,6 +113,9 @@ public:
         case TT_KEYWORD:
             return "TT_KEYWORD:" + value;
 
+        case TT_EQEQ:
+            return "TT_EQEQ";
+
         case TT_NOTEQ:
             return "TT_NOTEQ";
 

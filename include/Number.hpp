@@ -64,6 +64,54 @@ class Number
             return result;
         }
 
+        Number getCompEqual(Number other) {
+            Number result(value == other.getValue() ? 1 : 0);
+            result.setContext(context);
+            return result;
+        }
+
+        Number getCompNotEqual(Number other) {
+            Number result(value != other.getValue() ? 1 : 0);
+            result.setContext(context);
+            return result;
+        }
+
+        Number getCompLesst(Number other) {
+            Number result(value < other.getValue() ? 1 : 0);
+            result.setContext(context);
+            return result;
+        }
+
+        Number getCompGreatt(Number other) {
+            Number result(value > other.getValue() ? 1 : 0);
+            result.setContext(context);
+            return result;
+        }
+
+        Number getCompLessEqualt(Number other) {
+            Number result(value <= other.getValue() ? 1 : 0);
+            result.setContext(context);
+            return result;
+        }
+
+        Number getCompGreatEqualt(Number other) {
+            Number result(value >= other.getValue() ? 1 : 0);
+            result.setContext(context);
+            return result;
+        }
+
+        Number getCompAND(Number other) {
+            Number result(value && other.getValue() ? 1 : 0);
+            result.setContext(context);
+            return result;
+        }
+
+        Number getCompOR(Number other) {
+            Number result(value || other.getValue() ? 1 : 0);
+            result.setContext(context);
+            return result;
+        }
+
         Number setContext(Context pContext) {
             context = pContext;
             return *this;

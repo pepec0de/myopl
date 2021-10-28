@@ -76,7 +76,8 @@ class Parser {
         }
 
         ParseResult power() {
-            return bin_op("atom");
+            TokenType tts[] = {TT_POW};
+            return bin_op("atom", tts, 1);
         }
 
         ParseResult factor() {
@@ -139,30 +140,76 @@ class Parser {
                     return res.failure(MemoryError());
                 }
             }
-            Node* node = res.mRegister(bin_op("term"));
+            Node* node = res.mRegister(bin_op("comp_expr", {}, 0));
             if (res.getError().isError()) {
                 return res.failure(InvalidSyntaxError(currTok.getPosStart(), currTok.getPosEnd(), "Expected \'VAR\', int, float, identifier, \'+\', \'-\' or \'(\'"));
             }
             return res.success(node);
         }
 
-        ParseResult bin_op(string func) { // func = "factor" | func = "term" | func = "atom"
+        ParseResult comp_expr() {
+            ParseResult res;
+
+            if (currTok.matches(TT_KEYWORD, "NOT")) {
+                Token opTok = currTok;
+                advance();
+
+                Node* node = res.mRegister(comp_expr());
+                if (res.getError().isError()) {
+                    return res;
+                }
+                Node* result = new Node;
+                if (result != NULL) {
+                    result->data = opTok;
+                    result->left = node;
+                    result->right = NULL;
+                    return res.success(result);
+                } else {
+                    res.failure(MemoryError());
+                }
+            }
+
+            TokenType tts[] = {TT_EQEQ, TT_NOTEQ, TT_LESST, TT_GREATT, TT_LESSTEQ, TT_GREATTEQ};
+            Node* node = res.mRegister(bin_op("arith_expr", tts, 6));
+
+            if (res.getError().isError())
+                return res.failure(InvalidSyntaxError(currTok.getPosStart(), currTok.getPosEnd(), "Expected int, float, identifier, \'+\', \'-\', \'(\', or \'NOT\'"));
+
+            return res.success(node);
+        }
+
+        ParseResult arith_expr() {
+            TokenType tts[] = {TT_PLUS, TT_MINUS};
+            return bin_op("term", tts, 2);
+        }
+
+        ParseResult term() {
+            TokenType tts[] = {TT_MUL, TT_DIV};
+            return bin_op("factor", tts, 2);
+        }
+
+        bool in(TokenType tt, TokenType tts[], int size) {
+            for (int i = 0; i < size; i++) {
+                if (tts[i] == tt) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        ParseResult bin_op(string func, TokenType tts[], int ttsSize) { // func = "factor" | func = "term" | func = "atom"
             ParseResult res;
             if (DEBUG) cout << "START bin_op(\"" << func << "\")\n";
-            TokenType tt1, tt2;
             Node* leftNode = NULL;
             if (func == "factor") {
-                tt1 = TT_MUL;
-                tt2 = TT_DIV;
                 leftNode = res.mRegister(factor());
             } else if (func == "term") {
-                tt1 = TT_PLUS;
-                tt2 = TT_MINUS;
-                leftNode = res.mRegister(bin_op("factor"));
-            } else /*if (func == "atom") (avoiding warning)*/ {
-                tt1 = TT_POW;
-                tt2 = TT_NULL;
+                leftNode = res.mRegister(term());
+            } else if (func == "atom") {
                 leftNode = res.mRegister(atom());
+            } else if (func == "comp_expr") {
+                leftNode = res.mRegister(comp_expr());
+            } else /*if (func == "arith_expr")*/{
+                leftNode = res.mRegister(arith_expr());
             }
             // Comprobamos si ParseResult ha devuelto error
             if (res.getError().isError()) {
@@ -174,7 +221,8 @@ class Parser {
                 if (DEBUG) cout << "AFTER \"" << func << "\": leftNode = ";
                 printNode(leftNode);
                 Node* binOpNode = NULL;
-                while(currTok.getTokenType() == tt1 || currTok.getTokenType() == tt2) {
+
+                while(in(currTok.getTokenType(), tts, ttsSize)||(currTok.getTokenType()==TT_KEYWORD&&(currTok.getValue()=="AND"||currTok.getValue()=="OR"))) {
                     if (aux != NULL) {
                         leftNode = aux;
                     }
@@ -185,7 +233,7 @@ class Parser {
                     if (func == "factor" || func == "atom") {
                         rightNode = res.mRegister(factor());
                     } else { // func == "term"
-                        rightNode = res.mRegister(bin_op("factor"));
+                        rightNode = res.mRegister(term());
                     }
                     if (res.getError().isError()) {
                         return res;
