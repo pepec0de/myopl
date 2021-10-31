@@ -28,6 +28,63 @@ class Parser {
             }
         }
 
+        ParseResult if_expr() {
+            ParseResult res;
+            map<Node*, Node*> cases; // <Condition, Expression>
+            Node* elseCase;
+
+            if (!currTok.matches(TT_KEYWORD, "IF")) {
+                return res.failure(InvalidSyntaxError(currTok.getPosStart(), currTok.getPosEnd(), "Expected IF"));
+            }
+            advance();
+            Node* condition = res.mRegister(expr());
+            if (res.getError().isError()) return res;
+
+            if (!currTok.matches(TT_KEYWORD, "THEN")) {
+                return res.failure(InvalidSyntaxError(currTok.getPosStart(), currTok.getPosEnd(), "Expected THEN"));
+            }
+
+            advance();
+
+            Node* nodeExpr = res.mRegister(expr());
+            if (res.getError().isError()) return res;
+            cases[condition] = nodeExpr;
+
+            while (currTok.matches(TT_KEYWORD, "ELIF")) {
+                advance();
+
+                condition = res.mRegister(expr());
+                if (res.getError().isError()) return res;
+
+                if (!currTok.matches(TT_KEYWORD, "THEN")) {
+                    return res.failure(InvalidSyntaxError(currTok.getPosStart(), currTok.getPosEnd(), "Expected THEN"));
+                }
+
+                advance();
+
+                nodeExpr = res.mRegister(expr());
+                if (res.getError().isError()) return res;
+                cases[condition] = nodeExpr;
+            }
+
+            if (currTok.matches(TT_KEYWORD, "ELSE")) {
+                advance();
+
+                elseCase = res.mRegister(expr());
+                if (res.getError().isError()) return res;
+            }
+
+            // Build cases tree
+            Node* casesRoot = new Node;
+            if (casesRoot != NULL) {
+                 casesRoot->right = elseCase;
+                 Node* aux = casesRoot;
+                 for (map<Node*, Node*>::iterator it = cases.begin(); it != cases.end(); it++) {
+                    aux = it->first;
+                 }
+            }
+        }
+
         ParseResult atom() {
             ParseResult res;
             Token tok = currTok;
@@ -70,9 +127,13 @@ class Parser {
                 } else {
                     return res.failure(InvalidSyntaxError(currTok.getPosStart(), currTok.getPosEnd(), "Expected \')\'"));
                 }
+            } else if (tok.matches(TT_KEYWORD, "IF")) {
+                Node* nodeIf_expr = res.mRegister(if_expr());
+                if (res.getError().isError()) return res;
+                return res.success(nodeIf_expr);
             }
 
-            return res.failure(InvalidSyntaxError(tok.getPosStart(), tok.getPosEnd(), "Expected int or float"));
+            return res.failure(InvalidSyntaxError(tok.getPosStart(), tok.getPosEnd(), "Expected int, float, identifier or term"));
         }
 
         ParseResult power() {
@@ -197,7 +258,7 @@ class Parser {
             }
             return false;
         }
-        ParseResult bin_op(string func, TokenType tts[], int ttsSize) { // func = "factor" | func = "term" | func = "atom"
+        ParseResult bin_op(string func, TokenType tts[], int ttsSize) {
             ParseResult res;
             if (DEBUG) cout << "START bin_op(\"" << func << "\")\n";
             Node* leftNode = NULL;
