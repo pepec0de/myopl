@@ -1,4 +1,5 @@
 expr        : KEYWORD:VAR IDENTIFIER EQ expr
+            : comp-expr ((KEYWORD:AND|KEYWORD:OR) comp-expr)*
 
 comp-expr   : NOT comp-expr
             : arith-expr ((EE|LT|GT|LTE|GTE) arith-expr)*
@@ -14,5 +15,10 @@ power       : atom (POW factor)*
 
 atom        : INT|FLOAT
             : LPAREN expr RPAREN
+            : if-expr
+
+if-expr     : KEYWORD:IF expr KEYWORD:THEN expr
+              (KEYWORD:ELIF expr KEYWORD:THEN expr)*
+              (KEYWORD:ELSE expr)? optional
 
 
