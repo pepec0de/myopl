@@ -112,6 +112,12 @@ class Number
             return result;
         }
 
+        Number getCompNOT() {
+            Number result(!value);
+            result.setContext(context);
+            return result;
+        }
+
         Number setContext(Context pContext) {
             context = pContext;
             return *this;

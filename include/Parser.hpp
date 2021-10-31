@@ -160,6 +160,7 @@ class Parser {
                 }
                 Node* result = new Node;
                 if (result != NULL) {
+                    // UnaryOpNode
                     result->data = opTok;
                     result->left = node;
                     result->right = NULL;
@@ -222,7 +223,8 @@ class Parser {
                 printNode(leftNode);
                 Node* binOpNode = NULL;
 
-                while(in(currTok.getTokenType(), tts, ttsSize)||(currTok.getTokenType()==TT_KEYWORD&&(currTok.getValue()=="AND"||currTok.getValue()=="OR"))) {
+                while(in(currTok.getTokenType(), tts, ttsSize)
+                      || (currTok.getTokenType() == TT_KEYWORD && (currTok.getValue() == "AND" || currTok.getValue() == "OR"))) {
                     if (aux != NULL) {
                         leftNode = aux;
                     }
@@ -232,6 +234,10 @@ class Parser {
                     Node* rightNode;
                     if (func == "factor" || func == "atom") {
                         rightNode = res.mRegister(factor());
+                    } else if (func == "comp_expr") {
+                        rightNode = res.mRegister(comp_expr());
+                    } else if (func == "arith_expr") {
+                        rightNode = res.mRegister(arith_expr());
                     } else { // func == "term"
                         rightNode = res.mRegister(term());
                     }

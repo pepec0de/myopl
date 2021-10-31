@@ -39,8 +39,13 @@ void run(string text, Context &context) {
 
 int main() {
     SymbolTable globalST;
-    SymbolValue nullVal; nullVal.type = "number"; nullVal.value = "0";
-    globalST.append("null", nullVal);
+    SymbolValue value;
+    value.type = "number"; value.value = "0";
+    globalST.append("null", value);
+    value.type = "number"; value.value = "1";
+    globalST.append("true", value);
+    value.type = "number"; value.value = "0";
+    globalST.append("false", value);
 
     Context context("<program>");
     context.setSymbolTable(globalST);

@@ -53,6 +53,10 @@ public:
         keywords.push_back("AND");
         keywords.push_back("OR");
         keywords.push_back("NOT");
+        keywords.push_back("IF");
+        keywords.push_back("THEN");
+        keywords.push_back("ELIF");
+        keywords.push_back("ELSE");
     }
 
 	/*

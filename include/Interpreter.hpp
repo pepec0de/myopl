@@ -14,8 +14,8 @@ class Interpreter {
         }
 
         // Returns true if node contains + or - operator
-        bool isSymbolNode(Node* node) {
-            return node->data.getTokenType() == TT_PLUS || node->data.getTokenType() == TT_MINUS;
+        bool isUnarySymbolNode(Node* node) {
+            return node->data.getTokenType() == TT_PLUS || node->data.getTokenType() == TT_MINUS || node->data.matches(TT_KEYWORD, "NOT");
         }
     public:
         string getMethodName(Node* node) {
@@ -24,7 +24,7 @@ class Interpreter {
             if (node->data.getTokenType() == TT_IDENTIFIER && node->right == NULL) return "VarAssignNode";
             // Arithmetic methods:
             if (isNumberNode(node)) return "NumberNode";
-            if (isSymbolNode(node) && node->right == NULL) return "UnaryOpNode";
+            if (isUnarySymbolNode(node) && node->right == NULL) return "UnaryOpNode";
             return "BinOpNode";
         }
 
@@ -135,6 +135,8 @@ class Interpreter {
 
             if (node->data.getTokenType() == TT_MINUS) {
                 number = number.multedBy(Number(-1));
+            } else if (node->data.matches(TT_KEYWORD, "NOT")) {
+                number = number.getCompNOT();
             }
 
             number.setNumberPosition(node->data.getPosStart(), node->data.getPosEnd());
