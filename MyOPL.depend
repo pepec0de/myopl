@@ -63,7 +63,7 @@
 
 1620380346 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\parser.cpp
 
-1635673770 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\parser.hpp
+1635757481 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\parser.hpp
 	"ParseResult.hpp"
 
 1620386811 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\operationstructs.hpp
@@ -142,4 +142,10 @@
 1634997500 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\symboltable.hpp
 	<iostream>
 	<map>
+
+1635756175 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\optreenode.cpp
+	"OPTreeNode.hpp"
+
+1635757469 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\optreenode.hpp
+	"Token.hpp"
 

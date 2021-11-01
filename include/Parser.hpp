@@ -75,14 +75,8 @@ class Parser {
             }
 
             // Build cases tree
-            Node* casesRoot = new Node;
-            if (casesRoot != NULL) {
-                 casesRoot->right = elseCase;
-                 Node* aux = casesRoot;
-                 for (map<Node*, Node*>::iterator it = cases.begin(); it != cases.end(); it++) {
-                    aux = it->first;
-                 }
-            }
+            Node* result = new Node;
+            return res.success(result);
         }
 
         ParseResult atom() {
