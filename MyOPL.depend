@@ -63,18 +63,19 @@
 
 1620380346 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\parser.cpp
 
-1635757481 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\parser.hpp
+1635760453 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\parser.hpp
 	"ParseResult.hpp"
 
 1620386811 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\operationstructs.hpp
 	"Token.hpp"
 
-1633624806 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\operationtree.cpp
+1635759167 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\operationtree.cpp
 	"OperationTree.hpp"
 
-1635014413 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\operationtree.hpp
+1635759952 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\operationtree.hpp
 	"StringUtils.hpp"
 	"Token.hpp"
+	<map>
 
 1635140352 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\errors.hpp
 	"Position.hpp"
@@ -91,7 +92,7 @@
 1633872000 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\interpreter.cpp
 	"Interpreter.hpp"
 
-1635441654 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\interpreter.hpp
+1635759763 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\interpreter.hpp
 	"OperationTree.hpp"
 	"Number.hpp"
 	"RuntimeResult.hpp"
@@ -146,6 +147,6 @@
 1635756175 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\optreenode.cpp
 	"OPTreeNode.hpp"
 
-1635757469 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\optreenode.hpp
+1635759092 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\optreenode.hpp
 	"Token.hpp"
 

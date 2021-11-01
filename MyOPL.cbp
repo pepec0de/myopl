@@ -43,7 +43,6 @@
 		<Unit filename="include/Interpreter.hpp" />
 		<Unit filename="include/Lexer.hpp" />
 		<Unit filename="include/Number.hpp" />
-		<Unit filename="include/OPTreeNode.hpp" />
 		<Unit filename="include/OperationTree.hpp" />
 		<Unit filename="include/ParseResult.hpp" />
 		<Unit filename="include/Parser.hpp" />
@@ -52,14 +51,12 @@
 		<Unit filename="include/StringUtils.hpp" />
 		<Unit filename="include/SymbolTable.hpp" />
 		<Unit filename="include/Token.hpp" />
-		<Unit filename="include/UINT1024.hpp" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Context.cpp" />
 		<Unit filename="src/Error.cpp" />
 		<Unit filename="src/Interpreter.cpp" />
 		<Unit filename="src/Lexer.cpp" />
 		<Unit filename="src/Number.cpp" />
-		<Unit filename="src/OPTreeNode.cpp" />
 		<Unit filename="src/OperationTree.cpp" />
 		<Unit filename="src/ParseResult.cpp" />
 		<Unit filename="src/Parser.cpp" />
@@ -68,7 +65,6 @@
 		<Unit filename="src/StringUtils.cpp" />
 		<Unit filename="src/SymbolTable.cpp" />
 		<Unit filename="src/Token.cpp" />
-		<Unit filename="src/UINT1024.cpp" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>

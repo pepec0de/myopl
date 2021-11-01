@@ -31,7 +31,7 @@ class Parser {
         ParseResult if_expr() {
             ParseResult res;
             map<Node*, Node*> cases; // <Condition, Expression>
-            Node* elseCase;
+            Node* elseCase = NULL;
 
             if (!currTok.matches(TT_KEYWORD, "IF")) {
                 return res.failure(InvalidSyntaxError(currTok.getPosStart(), currTok.getPosEnd(), "Expected IF"));
@@ -76,6 +76,9 @@ class Parser {
 
             // Build cases tree
             Node* result = new Node;
+            result->type = IfNode;
+            result->cases = cases;
+            result->right = elseCase;
             return res.success(result);
         }
 

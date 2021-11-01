@@ -45,80 +45,11 @@ void OperationTree::setRootNode(Node *node) {
     root = node;
 }
 
-bool OperationTree::addNode(Node *parentNode, Token data) {
-    // Comprobamos que el nodo padre no tiene los dos nodos hijos ocupados
-    if (hasChild(parentNode) != 3) {
-        Node *newNode = new Node;
-        // Comprobamos que tenemos memoria
-        if (newNode != NULL) {
-            newNode->left = NULL;
-            newNode->right = NULL;
-            newNode->data = data;
-
-            if (parentNode->left == NULL) {
-                parentNode->left = newNode;
-            } else {
-                parentNode->right = newNode;
-            }
-            return true;
-        }
-    }
-    return false;
-}
-
-bool OperationTree::addNode(Node *parentNode, Token data, bool left) {
-    // Comprobamos que el nodo padre no tiene los dos nodos hijos ocupados
-    if (hasChild(parentNode) != 3) {
-        Node *newNode = new Node;
-        // Comprobamos que tenemos memoria
-        if (newNode != NULL) {
-            newNode->left = NULL;
-            newNode->right = NULL;
-            newNode->data = data;
-
-            if (left) {
-                if (parentNode->left == NULL) {
-                    parentNode->left = newNode;
-                } else {
-                    delete newNode;
-                    return false;
-                }
-            } else {
-                if (parentNode->right == NULL) {
-                    parentNode->right = newNode;
-                } else {
-                    delete newNode;
-                    return false;
-                }
-            }
-            return true;
-        }
-    }
-    return false;
-}
-
 bool OperationTree::hasChildren(Node *node) {
     if (node != NULL)
         return (node->left != NULL || node->right != NULL);
     else
         return false;
-}
-
-int OperationTree::hasChild(Node *node) {
-    // 0 no children
-    // 1 left child
-    // 2 right child
-    // 3 both children
-    if (!hasChildren(node)) {
-        return 0;
-    }
-    if (node->left != NULL && node->right == NULL) {
-        return 1;
-    }
-    if (node->left == NULL && node->right != NULL) {
-        return 2;
-    }
-    return 3;
 }
 
 string OperationTree::as_string() {
