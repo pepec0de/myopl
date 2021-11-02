@@ -18,32 +18,26 @@ class Interpreter {
             return node->data.getTokenType() == TT_PLUS || node->data.getTokenType() == TT_MINUS || node->data.matches(TT_KEYWORD, "NOT");
         }
     public:
-        string getMethodName(Node* node) {
-            // Programming methods:
-            if (node->data.getTokenType() == TT_IDENTIFIER && node->left == NULL && node->right == NULL) return "VarAccessNode";
-            if (node->data.getTokenType() == TT_IDENTIFIER && node->right == NULL) return "VarAssignNode";
-            // Arithmetic methods:
-            if (isNumberNode(node)) return "NumberNode";
-            if (isUnarySymbolNode(node) && node->right == NULL) return "UnaryOpNode";
-            return "BinOpNode";
-        }
-
         RuntimeResult visit(Node* node, Context &context) {
-            string methodName = getMethodName(node);
-            if (methodName == "VarAssignNode") {
-                return visit_VarAssignNode(node, context);
+            switch (node->type) {
+                case VarAssignNode:
+                    return visit_VarAssignNode(node, context);
+
+                case VarAccessNode:
+                    return visit_VarAccessNode(node, context);
+
+                case NumberNode:
+                    return visit_NumberNode(node, context);
+
+                case UnaryOpNode:
+                    return visit_UnaryOpNode(node, context);
+
+                case BinOpNode:
+                    return visit_BinaryOpNode(node, context);
+
+                default:
+                    return visit_IfNode(node, context);
             }
-            if (methodName == "VarAccessNode") {
-                return visit_VarAccessNode(node, context);
-            }
-            if (methodName == "NumberNode") {
-                return visit_NumberNode(node, context);
-            }
-            if (methodName == "UnaryOpNode") {
-                return visit_UnaryOpNode(node, context);
-            }
-            // "BinaryOpNode"
-            return visit_BinaryOpNode(node, context);
         }
 
         RuntimeResult visit_NumberNode(Node* node, Context context) {
@@ -167,6 +161,30 @@ class Interpreter {
             varValue.value = num.as_string();
             context.getSymbolTable().append(varName, varValue);
             return res.success(num);
+        }
+
+        RuntimeResult visit_IfNode(Node* node, Context context) {
+            RuntimeResult res;
+            // Iterate through cases map
+            for (map<Node*, Node*>::iterator it = node->cases.begin(); it != node->cases.end(); it++) {
+                Number conditionValue = res.mRegister(visit(it->first, context));
+                if (res.getError().isError()) return res;
+
+                if (conditionValue.getValue() == 1) {
+                    Number exprValue = res.mRegister(visit(it->second, context));
+                    if (res.getError().isError()) return res;
+                    return res.success(exprValue);
+                }
+            }
+
+            // Check elseCase
+            if (node->right != NULL) {
+                Number elseValue = res.mRegister(visit(node->right, context));
+                if (res.getError().isError()) return res;
+                return res.success(elseValue);
+            }
+
+            return res.success(0);
         }
 };
 

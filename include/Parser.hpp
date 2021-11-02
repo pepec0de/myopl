@@ -3,8 +3,7 @@
 
 #include "ParseResult.hpp"
 
-#define DEBUG false
-
+#define DEBUG true
 /*
     Clase dedicada a parsear los tokens que hemos recolectado, de manera que
     podemos construir nuestro AST para reconocer y realizar operaciones
@@ -94,6 +93,7 @@ class Parser {
                     // res.register(advance());
                     advance();
                     result->data = tok;
+                    result->type = NumberNode;
                     return res.success(result);
                 } else {
                     return res.failure(MemoryError());
@@ -144,18 +144,21 @@ class Parser {
 
             if (tok.getTokenType() == TT_PLUS ||tok.getTokenType() == TT_MINUS) {
                 Node* result = new Node;
-                if (result == NULL) return res.failure(MemoryError());
-                result->left = NULL;
-                result->right = NULL;
-                // res.register(advance());
-                advance();
-                Node* factorNode = res.mRegister(factor());
-                if (res.getError().isError()) {
-                    return res;
+                if (result != NULL) {
+                    result->left = NULL;
+                    result->right = NULL;
+                    // res.register(advance());
+                    advance();
+                    Node* factorNode = res.mRegister(factor());
+                    if (res.getError().isError()) return res;
+
+                    result->data = tok;
+                    result->type = UnaryOpNode;
+                    result->left = factorNode;
+                    return res.success(result);
+                } else {
+                    return res.failure(MemoryError());
                 }
-                result->data = tok;
-                result->left = factorNode;
-                return res.success(result);
             }
             return power();
         }
@@ -190,6 +193,8 @@ class Parser {
                 }
                 Node* result = new Node;
                 if (result != NULL) {
+                    // VarAssignNode
+                    result->type = VarAssignNode;
                     result->data = varToken;
                     result->left = varExpr;
                     result->right = NULL;
@@ -219,6 +224,7 @@ class Parser {
                 Node* result = new Node;
                 if (result != NULL) {
                     // UnaryOpNode
+                    result->type = UnaryOpNode;
                     result->data = opTok;
                     result->left = node;
                     result->right = NULL;
