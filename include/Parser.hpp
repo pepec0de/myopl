@@ -27,6 +27,67 @@ class Parser {
             }
         }
 
+        ParseResult atom() {
+            ParseResult res;
+            Token tok = currTok;
+
+            if (tok.getTokenType() == TT_INT || tok.getTokenType() == TT_FLOAT) {
+                Node* result = new Node;
+                if (result != NULL) {
+                    result->left = NULL;
+                    result->right = NULL;
+                    // res.register(advance());
+                    advance();
+                    result->data = tok;
+                    result->type = NumberNode;
+                    return res.success(result);
+                } else {
+                    return res.failure(MemoryError());
+                }
+            } else if (tok.getTokenType() == TT_IDENTIFIER) {
+                // res.register(advance());
+                advance();
+                Node* result = new Node;
+                if (result != NULL) {
+                    result->data = tok;
+                    result->type = VarAccessNode;
+                    result->left = NULL;
+                    result->right = NULL;
+                    return res.success(result);
+                } else {
+                    return res.failure(MemoryError());
+                }
+            } else if (tok.getTokenType() == TT_LPAREN) {
+                // res.register(advance());
+                advance();
+                Node* exprNode = res.mRegister(expr());
+                if (res.getError().isError()) {
+                    return res;
+                }
+                if (currTok.getTokenType() == TT_RPAREN) {
+                    // res.register(advance());
+                    advance();
+                    return res.success(exprNode);
+                } else {
+                    return res.failure(InvalidSyntaxError(currTok.getPosStart(), currTok.getPosEnd(), "Expected \')\'"));
+                }
+            } else if (tok.matches(TT_KEYWORD, "IF")) {
+                Node* node = res.mRegister(if_expr());
+                if (res.getError().isError()) return res;
+                return res.success(node);
+            } else if (tok.matches(TT_KEYWORD, "FOR")) {
+                Node* node = res.mRegister(for_expr());
+                if (res.getError().isError()) return res;
+                return res.success(node);
+            } else if (tok.matches(TT_KEYWORD, "WHILE")) {
+                Node* node = res.mRegister(while_expr());
+                if (res.getError().isError()) return res;
+                return res.success(node);
+            }
+
+            return res.failure(InvalidSyntaxError(tok.getPosStart(), tok.getPosEnd(), "Expected int, float, identifier or term"));
+        }
+
         ParseResult if_expr() {
             ParseResult res;
             map<Node*, Node*> cases; // <Condition, Expression>
@@ -84,57 +145,14 @@ class Parser {
             return res.success(result);
         }
 
-        ParseResult atom() {
+        ParseResult for_expr() {
             ParseResult res;
-            Token tok = currTok;
+            return res;
+        }
 
-            if (tok.getTokenType() == TT_INT || tok.getTokenType() == TT_FLOAT) {
-                Node* result = new Node;
-                if (result != NULL) {
-                    result->left = NULL;
-                    result->right = NULL;
-                    // res.register(advance());
-                    advance();
-                    result->data = tok;
-                    result->type = NumberNode;
-                    return res.success(result);
-                } else {
-                    return res.failure(MemoryError());
-                }
-            } else if (tok.getTokenType() == TT_IDENTIFIER) {
-                // res.register(advance());
-                advance();
-                Node* result = new Node;
-                if (result != NULL) {
-                    result->data = tok;
-                    result->type = VarAccessNode;
-                    result->left = NULL;
-                    result->right = NULL;
-                    return res.success(result);
-                } else {
-                    return res.failure(MemoryError());
-                }
-            } else if (tok.getTokenType() == TT_LPAREN) {
-                // res.register(advance());
-                advance();
-                Node* exprNode = res.mRegister(expr());
-                if (res.getError().isError()) {
-                    return res;
-                }
-                if (currTok.getTokenType() == TT_RPAREN) {
-                    // res.register(advance());
-                    advance();
-                    return res.success(exprNode);
-                } else {
-                    return res.failure(InvalidSyntaxError(currTok.getPosStart(), currTok.getPosEnd(), "Expected \')\'"));
-                }
-            } else if (tok.matches(TT_KEYWORD, "IF")) {
-                Node* nodeIf_expr = res.mRegister(if_expr());
-                if (res.getError().isError()) return res;
-                return res.success(nodeIf_expr);
-            }
-
-            return res.failure(InvalidSyntaxError(tok.getPosStart(), tok.getPosEnd(), "Expected int, float, identifier or term"));
+        ParseResult while_expr() {
+            ParseResult res;
+            return res;
         }
 
         ParseResult power() {
