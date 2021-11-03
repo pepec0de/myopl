@@ -3,7 +3,7 @@
 
 #include "ParseResult.hpp"
 
-#define DEBUG true
+#define DEBUG false
 /*
     Clase dedicada a parsear los tokens que hemos recolectado, de manera que
     podemos construir nuestro AST para reconocer y realizar operaciones
@@ -75,9 +75,12 @@ class Parser {
 
             // Build cases tree
             Node* result = new Node;
-            result->type = IfNode;
-            result->cases = cases;
-            result->right = elseCase;
+            if (result != NULL) {
+                result->type = IfNode;
+                result->cases = cases;
+                result->left = NULL;
+                result->right = elseCase;
+            } else return res.failure(MemoryError());
             return res.success(result);
         }
 
@@ -104,6 +107,7 @@ class Parser {
                 Node* result = new Node;
                 if (result != NULL) {
                     result->data = tok;
+                    result->type = VarAccessNode;
                     result->left = NULL;
                     result->right = NULL;
                     return res.success(result);
@@ -218,14 +222,13 @@ class Parser {
                 advance();
 
                 Node* node = res.mRegister(comp_expr());
-                if (res.getError().isError()) {
-                    return res;
-                }
+                if (res.getError().isError()) return res;
+
                 Node* result = new Node;
                 if (result != NULL) {
                     // UnaryOpNode
-                    result->type = UnaryOpNode;
                     result->data = opTok;
+                    result->type = UnaryOpNode;
                     result->left = node;
                     result->right = NULL;
                     return res.success(result);
@@ -313,6 +316,7 @@ class Parser {
                     binOpNode = new Node;
                     if (binOpNode != NULL) {
                         binOpNode->data = op_tok;
+                        binOpNode->type = BinOpNode;
                         binOpNode->left = leftNode;
                         binOpNode->right = rightNode;
                         aux = binOpNode;

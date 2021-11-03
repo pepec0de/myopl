@@ -218,7 +218,7 @@ public:
         }
         advance();
         error = ExpectedCharError(posStart, pos, "\'=\' (after \'!\')");
-        return Token(TT_NULL, "", posStart, pos);
+        return Token(TT_NOTEQ, "", posStart, pos);
 	}
 
 	Token getEquals() {

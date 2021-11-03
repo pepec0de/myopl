@@ -15,6 +15,10 @@ void run(string text, Context &context) {
     Error error;
 
     vector<Token> tokens = lexer.getTokens(error);
+    for (Token tok : tokens) {
+        cout << tok.as_string() + ", ";
+    }
+    cout << endl;
     if (!error.isError()) {
         Parser parser(tokens);
         ParseResult resultAST = parser.parse();

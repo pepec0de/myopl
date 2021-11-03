@@ -2,7 +2,7 @@
 1619941548 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\lexer.cpp
 	"Lexer.hpp"
 
-1635671827 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\lexer.hpp
+1635964611 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\lexer.hpp
 	<iostream>
 	<vector>
 	<algorithm>
@@ -16,11 +16,11 @@
 1619941531 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\token.cpp
 	"Token.hpp"
 
-1635398898 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\token.hpp
+1635964564 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\token.hpp
 	<iostream>
 	"Position.hpp"
 
-1635669698 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\main.cpp
+1635964191 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\main.cpp
 	<iostream>
 	"Lexer.hpp"
 	"Parser.hpp"
@@ -63,16 +63,16 @@
 
 1620380346 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\parser.cpp
 
-1635837600 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\parser.hpp
+1635965319 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\parser.hpp
 	"ParseResult.hpp"
 
 1620386811 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\operationstructs.hpp
 	"Token.hpp"
 
-1635759167 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\operationtree.cpp
+1635963642 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\operationtree.cpp
 	"OperationTree.hpp"
 
-1635759952 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\operationtree.hpp
+1635963392 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\operationtree.hpp
 	"StringUtils.hpp"
 	"Token.hpp"
 	<map>
@@ -92,7 +92,7 @@
 1633872000 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\interpreter.cpp
 	"Interpreter.hpp"
 
-1635836954 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\interpreter.hpp
+1635965081 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\interpreter.hpp
 	"OperationTree.hpp"
 	"Number.hpp"
 	"RuntimeResult.hpp"

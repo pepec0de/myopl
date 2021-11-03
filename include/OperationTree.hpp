@@ -44,6 +44,7 @@ class OperationTree {
         // DEBUG
         string as_string();
         string getNodeAsString(Node *node);
+        string getNodeTypeAsString(NodeType nt);
 };
 
 #endif // OPERATIONTREE_HPP

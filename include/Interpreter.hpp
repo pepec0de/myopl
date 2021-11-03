@@ -170,7 +170,7 @@ class Interpreter {
                 Number conditionValue = res.mRegister(visit(it->first, context));
                 if (res.getError().isError()) return res;
 
-                if (conditionValue.getValue() == 1) {
+                if (conditionValue.getValue() != 0) {
                     Number exprValue = res.mRegister(visit(it->second, context));
                     if (res.getError().isError()) return res;
                     return res.success(exprValue);
@@ -184,7 +184,8 @@ class Interpreter {
                 return res.success(elseValue);
             }
 
-            return res.success(0);
+            Number none(0);
+            return res.success(none);
         }
 };
 

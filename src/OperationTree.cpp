@@ -53,12 +53,29 @@ bool OperationTree::hasChildren(Node *node) {
 }
 
 string OperationTree::as_string() {
-    return root->data.as_string() + "(" + (root->left == NULL ? " " : getNodeAsString(root->left))
-        + "," + (root->right == NULL ? " " : getNodeAsString(root->right)) + ")";
+    return getNodeAsString(root);
 }
 
 string OperationTree::getNodeAsString(Node *node) {
-    return node->data.as_string() + "(" + (node->left == NULL ? " " : getNodeAsString(node->left))
+    return node->data.as_string() + "{" + getNodeTypeAsString(node->type) + "}(" + (node->left == NULL ? " " : getNodeAsString(node->left))
         + "," + (node->right == NULL ? " " : getNodeAsString(node->right)) + ")";
 }
 
+string OperationTree::getNodeTypeAsString(NodeType nt) {
+    switch (nt) {
+        case NumberNode:
+            return "NumberNode";
+        case BinOpNode:
+            return "BinOpNode";
+        case UnaryOpNode:
+            return "UnaryOpNode";
+        case VarAccessNode:
+            return "VarAccessNode";
+        case VarAssignNode:
+            return "VarAssignNode";
+        case IfNode:
+            return "IfNode";
+        default:
+            return "Unhandled node type";
+    }
+}

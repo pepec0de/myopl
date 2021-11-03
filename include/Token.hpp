@@ -7,7 +7,6 @@
 using namespace std;
 
 enum TokenType {
-    TT_NULL,
     TT_EOF,
     // ARITH
     TT_INT,
