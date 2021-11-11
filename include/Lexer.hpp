@@ -57,6 +57,11 @@ public:
         keywords.push_back("THEN");
         keywords.push_back("ELIF");
         keywords.push_back("ELSE");
+        keywords.push_back("FOR");
+        keywords.push_back("STEP");
+        keywords.push_back("TO");
+        keywords.push_back("WHILE");
+        keywords.push_back("FUN");
     }
 
 	/*
@@ -89,7 +94,7 @@ public:
                     break;
 
                 case '-':
-                    tokens.push_back(Token(TT_MINUS, "", pos));
+                    tokens.push_back(getMinusOrArrow());
                     advance();
                     break;
 
@@ -138,6 +143,9 @@ public:
                 case '>':
                     tokens.push_back(getGreatt());
                     break;
+
+                case ',':
+                    tokens.push_back(Token(TT_COMMA, "", pos));
 
                 default: {
                     // ERROR
@@ -252,6 +260,18 @@ public:
             tt = TT_GREATTEQ;
         }
         return Token(tt, "", posStart, pos);
+	}
+
+	Token getMinusOrArrow() {
+        TokenType tt = TT_MINUS;
+        Position posStart = pos;
+        advance();
+
+        if (currChar == '>') {
+            advance();
+            tt = TT_ARROW;
+        }
+        return Token(tt, "", pos);
 	}
 
 };

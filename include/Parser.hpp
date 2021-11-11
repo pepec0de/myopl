@@ -90,7 +90,7 @@ class Parser {
 
         ParseResult if_expr() {
             ParseResult res;
-            map<Node*, Node*> cases; // <Condition, Expression>
+            vector<vector<Node*>> cases; // <Condition, Expression>
             Node* elseCase = NULL;
 
             if (!currTok.matches(TT_KEYWORD, "IF")) {
@@ -108,7 +108,7 @@ class Parser {
 
             Node* nodeExpr = res.mRegister(expr());
             if (res.getError().isError()) return res;
-            cases[condition] = nodeExpr;
+            cases.push_back({condition, nodeExpr});
 
             while (currTok.matches(TT_KEYWORD, "ELIF")) {
                 advance();
@@ -124,7 +124,7 @@ class Parser {
 
                 nodeExpr = res.mRegister(expr());
                 if (res.getError().isError()) return res;
-                cases[condition] = nodeExpr;
+                cases.push_back({condition, nodeExpr});
             }
 
             if (currTok.matches(TT_KEYWORD, "ELSE")) {
@@ -138,7 +138,7 @@ class Parser {
             Node* result = new Node;
             if (result != NULL) {
                 result->type = IfNode;
-                result->cases = cases;
+                result->nodeArr = cases;
                 result->left = NULL;
                 result->right = elseCase;
             } else return res.failure(MemoryError());
@@ -147,12 +147,89 @@ class Parser {
 
         ParseResult for_expr() {
             ParseResult res;
-            return res;
+
+//            if (!currTok.matches(TT_KEYWORD, "FOR")) {
+//                return res.failure(InvalidSyntaxError(currTok.getPosStart(), currTok.getPosEnd(), "Expected for"));
+//            }
+
+            advance();
+
+            if (currTok.getTokenType() != TT_IDENTIFIER) {
+                return res.failure(InvalidSyntaxError(currTok.getPosStart(), currTok.getPosEnd(), "Expected identifier"));
+            }
+
+            Token varTok = currTok;
+            advance();
+
+            if (currTok.getTokenType() != TT_EQUALS) {
+                return res.failure(InvalidSyntaxError(currTok.getPosStart(), currTok.getPosEnd(), "Expeceted \'=\'"));
+            }
+
+            advance();
+
+            Node* startValue = res.mRegister(expr());
+            if (res.getError().isError()) return res;
+
+            if (!currTok.matches(TT_KEYWORD, "TO")) {
+                return res.failure(InvalidSyntaxError(currTok.getPosStart(), currTok.getPosEnd(), "Expeceted TO"));
+            }
+
+            advance();
+
+            Node* endValue = res.mRegister(expr());
+            if (res.getError().isError()) return res;
+
+            Node* stepValue = NULL;
+            if (currTok.matches(TT_KEYWORD, "STEP")) {
+                advance();
+
+                stepValue = res.mRegister(expr());
+                if (res.getError().isError()) return res;
+            }
+
+            if (!currTok.matches(TT_KEYWORD, "THEN")) {
+                return res.failure(InvalidSyntaxError(currTok.getPosStart(), currTok.getPosEnd(), "Expeceted THEN"));
+            }
+
+            advance();
+            Node* body = res.mRegister(expr());
+            if (res.getError().isError()) return res;
+
+            Node* result = new Node;
+            if (result != NULL) {
+                result->type = ForNode;
+                result->data = varTok;
+                result->nodeArr = {{endValue, stepValue}};
+                result->left = startValue;
+                result->right = body;
+            } else return res.failure(MemoryError());
+
+            return res.success(result);
         }
 
         ParseResult while_expr() {
             ParseResult res;
-            return res;
+
+            advance();
+            Node* condition = res.mRegister(expr());
+            if (res.getError().isError()) return res;
+
+            if (!currTok.matches(TT_KEYWORD, "THEN")) {
+                return res.failure(InvalidSyntaxError(currTok.getPosStart(), currTok.getPosEnd(), "Expeceted THEN"));
+            }
+
+            advance();
+            Node* body = res.mRegister(expr());
+            if (res.getError().isError()) return res;
+
+            Node* result = new Node;
+            if (result != NULL) {
+                result->type = WhileNode;
+                result->left = condition;
+                result->right = body;
+            } else res.failure(MemoryError());
+
+            return res.success(result);
         }
 
         ParseResult power() {

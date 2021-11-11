@@ -40,6 +40,12 @@ public:
     void remove(string keyName) {
         symbols.erase(keyName);
     }
+
+    void print() {
+        for(map<string, SymbolValue>::const_iterator it = symbols.begin(); it != symbols.end(); it++) {
+            std::cout << it->first << " -> [" << it->second.type << ":" << it->second.value << "]\n";
+        }
+    }
 };
 
 #endif // SYMBOLTABLE_HPP

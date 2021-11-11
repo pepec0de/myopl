@@ -22,6 +22,8 @@ enum TokenType {
     TT_EQUALS,
     TT_IDENTIFIER,
     TT_KEYWORD,
+    TT_COMMA,
+    TT_ARROW,
     // LOGIC OPERATORS
     TT_NOTEQ, // !=
     TT_EQEQ, // ==

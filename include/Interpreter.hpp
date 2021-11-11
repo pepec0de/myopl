@@ -35,6 +35,12 @@ class Interpreter {
                 case BinOpNode:
                     return visit_BinaryOpNode(node, context);
 
+                case ForNode:
+                    return visit_ForNode(node, context);
+
+                case WhileNode:
+                    return visit_WhileNode(node, context);
+
                 default:
                     return visit_IfNode(node, context);
             }
@@ -163,15 +169,15 @@ class Interpreter {
             return res.success(num);
         }
 
-        RuntimeResult visit_IfNode(Node* node, Context context) {
+        RuntimeResult visit_IfNode(Node* node, Context &context) {
             RuntimeResult res;
-            // Iterate through cases map
-            for (map<Node*, Node*>::iterator it = node->cases.begin(); it != node->cases.end(); it++) {
-                Number conditionValue = res.mRegister(visit(it->first, context));
+            // Iterate through cases
+            for (unsigned int i = 0; i < node->nodeArr.size(); i++) {
+                Number conditionValue = res.mRegister(visit(node->nodeArr[i][0], context));
                 if (res.getError().isError()) return res;
 
                 if (conditionValue.getValue() != 0) {
-                    Number exprValue = res.mRegister(visit(it->second, context));
+                    Number exprValue = res.mRegister(visit(node->nodeArr[i][1], context));
                     if (res.getError().isError()) return res;
                     return res.success(exprValue);
                 }
@@ -186,6 +192,66 @@ class Interpreter {
 
             Number none(0);
             return res.success(none);
+        }
+
+        RuntimeResult visit_ForNode(Node* node, Context &context) {
+            RuntimeResult res;
+
+            Number startValue = res.mRegister(visit(node->left, context));
+            if (res.getError().isError()) return res;
+            Number endValue = res.mRegister(visit(node->nodeArr[0][0], context));
+            if (res.getError().isError()) return res;
+
+            Number stepValue;
+            if (node->nodeArr[0][1] != NULL) {
+                stepValue = res.mRegister(visit(node->nodeArr[0][1], context));
+                if (res.getError().isError()) return res;
+            } else {
+                stepValue = Number(1);
+            }
+
+            TNumber i = startValue.getValue();
+            bool bContinue = false;
+            if (stepValue.getValue() >= 0) {
+                bContinue = i < endValue.getValue();
+            } else {
+                bContinue = i > endValue.getValue();
+            }
+
+            while(bContinue) {
+                SymbolValue value;
+                value.type = "number";
+                value.value = Number(i).as_string();
+                context.getSymbolTable().append(node->data.getValue(), value);
+                cout << "SymbolTable:\n";
+                i += stepValue.getValue();
+
+                res.mRegister(visit(node->right, context));
+                if (res.getError().isError()) return res;
+
+                if (stepValue.getValue() >= 0) {
+                    bContinue = i < endValue.getValue();
+                } else {
+                    bContinue = i > endValue.getValue();
+                }
+            }
+
+            return res.success(Number(0));
+        }
+
+        RuntimeResult visit_WhileNode(Node* node, Context &context) {
+            RuntimeResult res;
+            Number condition;
+            while(true) {
+                condition = res.mRegister(visit(node->left, context));
+                if (res.getError().isError()) return res;
+
+                if (condition.getValue() == 0) break;
+
+                res.mRegister(visit(node->right, context));
+                if (res.getError().isError()) return res;
+            }
+            return res.success(Number(0));
         }
 };
 

@@ -75,6 +75,10 @@ string OperationTree::getNodeTypeAsString(NodeType nt) {
             return "VarAssignNode";
         case IfNode:
             return "IfNode";
+        case ForNode:
+            return "ForNode";
+        case WhileNode:
+            return "WhileNode";
         default:
             return "Unhandled node type";
     }

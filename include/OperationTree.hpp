@@ -13,7 +13,9 @@ enum NodeType {
     UnaryOpNode,
     VarAccessNode,
     VarAssignNode,
-    IfNode
+    IfNode,
+    ForNode,
+    WhileNode
 };
 
 struct Node {
@@ -21,7 +23,7 @@ struct Node {
     NodeType type;
     Node *left;
     Node *right;
-    map<Node*,Node*> cases;
+    vector<vector<Node*>> nodeArr;
 };
 
 class OperationTree {

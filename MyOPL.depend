@@ -2,7 +2,7 @@
 1619941548 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\lexer.cpp
 	"Lexer.hpp"
 
-1635964611 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\lexer.hpp
+1636197685 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\lexer.hpp
 	<iostream>
 	<vector>
 	<algorithm>
@@ -63,16 +63,16 @@
 
 1620380346 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\parser.cpp
 
-1635969954 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\parser.hpp
+1636375082 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\parser.hpp
 	"ParseResult.hpp"
 
 1620386811 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\operationstructs.hpp
 	"Token.hpp"
 
-1635963642 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\operationtree.cpp
+1636375317 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\operationtree.cpp
 	"OperationTree.hpp"
 
-1635963392 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\operationtree.hpp
+1636200649 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\operationtree.hpp
 	"StringUtils.hpp"
 	"Token.hpp"
 	<map>
@@ -92,7 +92,7 @@
 1633872000 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\interpreter.cpp
 	"Interpreter.hpp"
 
-1635965081 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\interpreter.hpp
+1636376324 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\interpreter.hpp
 	"OperationTree.hpp"
 	"Number.hpp"
 	"RuntimeResult.hpp"
@@ -140,7 +140,7 @@
 1634541405 source:c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\src\symboltable.cpp
 	"SymbolTable.hpp"
 
-1634997500 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\symboltable.hpp
+1636375789 c:\users\pepe\documents\programas\dev\cpp\codeblocksprojects\myopl\include\symboltable.hpp
 	<iostream>
 	<map>
 
