@@ -25,11 +25,12 @@ void run(string text, Context &context) {
         if (resultAST.getError().isError()) {
             cout << resultAST.getError().as_string();
         } else {
-            OperationTree ast;
-            ast.setRootNode(resultAST.getNode());
-            cout << "AST: " << ast.as_string() << endl;
+            //OperationTree ast;
+            //ast.setRootNode(resultAST.getNode());
+            Node* rootNode = resultAST.getNode();
+            //cout << "AST: " << ast.as_string() << endl;
             Interpreter interpreter;
-            RuntimeResult result = interpreter.visit(ast.getRootNode(), context);
+            RuntimeResult result = interpreter.visit(/*ast.getRootNode()*/rootNode, context);
             if (result.getError().isError()) {
                 cout << result.getError().as_string() << endl;
             } else {

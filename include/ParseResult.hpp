@@ -2,7 +2,7 @@
 #define PARSERESULT_HPP
 
 #include "Error.hpp"
-#include "OperationTree.hpp"
+#include "Node.hpp"
 
 class ParseResult
 {

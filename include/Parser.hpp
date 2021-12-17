@@ -6,8 +6,7 @@
 #define DEBUG false
 /*
     Clase dedicada a parsear los tokens que hemos recolectado, de manera que
-    podemos construir nuestro AST para reconocer y realizar operaciones
-    aritmeticas y reconocer tambien la declaracion o llamada de variables.
+    podemos construir nuestro AST para reconocer las instrucciones de nuestro lenguaje.
 
     AQUI es donde se invocan todos los demas errores cuando se incumplan
     las reglas de sintaxis y aritmeticas.
@@ -27,19 +26,18 @@ class Parser {
             }
         }
 
+
+///REPROGRAMAR ENTERO ------------------------------------------------------------------------------------------------------------------------------
         ParseResult atom() {
             ParseResult res;
             Token tok = currTok;
 
             if (tok.getTokenType() == TT_INT || tok.getTokenType() == TT_FLOAT) {
-                Node* result = new Node;
+                NumberNode* result = new NumberNode();
                 if (result != NULL) {
-                    result->left = NULL;
-                    result->right = NULL;
                     // res.register(advance());
                     advance();
-                    result->data = tok;
-                    result->type = NumberNode;
+                    result->numberTok = tok;
                     return res.success(result);
                 } else {
                     return res.failure(MemoryError());
@@ -47,12 +45,9 @@ class Parser {
             } else if (tok.getTokenType() == TT_IDENTIFIER) {
                 // res.register(advance());
                 advance();
-                Node* result = new Node;
+                VarAccessNode* result = new VarAccessNode();
                 if (result != NULL) {
-                    result->data = tok;
-                    result->type = VarAccessNode;
-                    result->left = NULL;
-                    result->right = NULL;
+                    result->varNameTok = tok;
                     return res.success(result);
                 } else {
                     return res.failure(MemoryError());
@@ -93,9 +88,6 @@ class Parser {
             vector<vector<Node*>> cases; // <Condition, Expression>
             Node* elseCase = NULL;
 
-            if (!currTok.matches(TT_KEYWORD, "IF")) {
-                return res.failure(InvalidSyntaxError(currTok.getPosStart(), currTok.getPosEnd(), "Expected IF"));
-            }
             advance();
             Node* condition = res.mRegister(expr());
             if (res.getError().isError()) return res;
@@ -135,22 +127,16 @@ class Parser {
             }
 
             // Build cases tree
-            Node* result = new Node;
+            IfNode* result = new IfNode();
             if (result != NULL) {
-                result->type = IfNode;
-                result->nodeArr = cases;
-                result->left = NULL;
-                result->right = elseCase;
+                result->cases = cases;
+                result->elseCase = elseCase;
             } else return res.failure(MemoryError());
             return res.success(result);
         }
 
         ParseResult for_expr() {
             ParseResult res;
-
-//            if (!currTok.matches(TT_KEYWORD, "FOR")) {
-//                return res.failure(InvalidSyntaxError(currTok.getPosStart(), currTok.getPosEnd(), "Expected for"));
-//            }
 
             advance();
 
@@ -195,13 +181,13 @@ class Parser {
             Node* body = res.mRegister(expr());
             if (res.getError().isError()) return res;
 
-            Node* result = new Node;
+            ForNode* result = new ForNode;
             if (result != NULL) {
-                result->type = ForNode;
-                result->data = varTok;
-                result->nodeArr = {{endValue, stepValue}};
-                result->left = startValue;
-                result->right = body;
+                result->varNameTok = varTok;
+                result->startValueNode = startValue;
+                result->endValueNode = endValue;
+                result->stepValueNode = stepValue;
+                result->bodyNode = body;
             } else return res.failure(MemoryError());
 
             return res.success(result);
@@ -222,11 +208,10 @@ class Parser {
             Node* body = res.mRegister(expr());
             if (res.getError().isError()) return res;
 
-            Node* result = new Node;
+            WhileNode* result = new WhileNode;
             if (result != NULL) {
-                result->type = WhileNode;
-                result->left = condition;
-                result->right = body;
+                result->conditionNode = condition;
+                result->bodyNode = body;
             } else res.failure(MemoryError());
 
             return res.success(result);
@@ -242,18 +227,15 @@ class Parser {
             Token tok = currTok;
 
             if (tok.getTokenType() == TT_PLUS ||tok.getTokenType() == TT_MINUS) {
-                Node* result = new Node;
+                UnaryOpNode* result = new UnaryOpNode;
                 if (result != NULL) {
-                    result->left = NULL;
-                    result->right = NULL;
                     // res.register(advance());
                     advance();
                     Node* factorNode = res.mRegister(factor());
                     if (res.getError().isError()) return res;
 
-                    result->data = tok;
-                    result->type = UnaryOpNode;
-                    result->left = factorNode;
+                    result->opTok = tok;
+                    result->node = factorNode;
                     return res.success(result);
                 } else {
                     return res.failure(MemoryError());
@@ -290,13 +272,11 @@ class Parser {
                 if (res.getError().isError()) {
                     return res;
                 }
-                Node* result = new Node;
+                VarAssignNode* result = new VarAssignNode;
                 if (result != NULL) {
                     // VarAssignNode
-                    result->type = VarAssignNode;
-                    result->data = varToken;
-                    result->left = varExpr;
-                    result->right = NULL;
+                    result->varNameTok = varToken;
+                    result->valueNode = varExpr;
                     return res.success(result);
                 } else {
                     return res.failure(MemoryError());
@@ -319,13 +299,10 @@ class Parser {
                 Node* node = res.mRegister(comp_expr());
                 if (res.getError().isError()) return res;
 
-                Node* result = new Node;
+                UnaryOpNode* result = new UnaryOpNode;
                 if (result != NULL) {
-                    // UnaryOpNode
-                    result->data = opTok;
-                    result->type = UnaryOpNode;
-                    result->left = node;
-                    result->right = NULL;
+                    result->opTok = opTok;
+                    result->node = node;
                     return res.success(result);
                 } else {
                     res.failure(MemoryError());
@@ -382,8 +359,8 @@ class Parser {
 
             if (leftNode != NULL) {
                 if (DEBUG) cout << "AFTER \"" << func << "\": leftNode = ";
-                printNode(leftNode);
-                Node* binOpNode = NULL;
+                //printNode(leftNode);
+                BinOpNode* binOpNode = NULL;
 
                 while(in(currTok.getTokenType(), tts, ttsSize)
                       || (currTok.getTokenType() == TT_KEYWORD && (currTok.getValue() == "AND" || currTok.getValue() == "OR"))) {
@@ -407,31 +384,32 @@ class Parser {
                         return res;
                     }
                     if (DEBUG) cout << "IN LOOP rightNode = ";
-                    printNode(rightNode);
-                    binOpNode = new Node;
+                    //printNode(rightNode);
+                    binOpNode = new BinOpNode;
                     if (binOpNode != NULL) {
-                        binOpNode->data = op_tok;
-                        binOpNode->type = BinOpNode;
-                        binOpNode->left = leftNode;
-                        binOpNode->right = rightNode;
+                        binOpNode->opTok = op_tok;
+                        //binOpNode->type = BinOpNode;
+                        binOpNode->leftNode = leftNode;
+                        binOpNode->rightNode = rightNode;
                         aux = binOpNode;
                         if (DEBUG) cout << "IN LOOP binOpNode = ";
-                        printNode(binOpNode);
+                        //printNode(binOpNode);
                     } else return res.failure(MemoryError());
                 }
                 aux = NULL;
                 if (binOpNode == NULL) {
                     if (DEBUG) cout << "END bin_op(\"" << func << "\") => leftNode = ";
-                    printNode(leftNode);
+                    //printNode(leftNode);
                     return res.success(leftNode);
                 } else {
                     if (DEBUG) cout << "END bin_op(\"" << func << "\") => binOpNode = ";
-                    printNode(binOpNode);
+                    //printNode(binOpNode);
                     return res.success(binOpNode);
                 }
             }
             return res.failure(MemoryError());
         }
+///-----------------------------------------------------------------------------------------------------------------------------------------------
 
     public:
         Parser() {}
@@ -451,9 +429,9 @@ class Parser {
             return resultAST;
         }
 
-        void printNode(Node *node) {
-            if (DEBUG) cout << node << "(" << node->data.as_string() << ", " << node->left << ", " << node->right << ")\n";
-        }
+//        void printNode(Node *node) {
+//            if (DEBUG) cout << node << "(" << node->data.as_string() << ", " << node->left << ", " << node->right << ")\n";
+//        }
 };
 
 #endif // PARSER_HPP
