@@ -4,8 +4,20 @@
 #include "Token.hpp"
 #include <vector>
 
+enum NodeType {
+    NullNode,
+    VarAssign,
+    VarAccess,
+    NumberN,
+    UnaryOp,
+    BinaryOp,
+    For,
+    While,
+    If
+};
+
 class Node {
-    virtual void nulo() {}
+    virtual void thisMakesAPolymorphicClass() {}
 };
 
 class NumberNode : public Node {
@@ -56,15 +68,23 @@ public:
     Node *endValueNode;
     Node *stepValueNode;
     Node *bodyNode;
-    // Position pStart = varNameTok.pStart
-    // Position pEnd = bodyNode.pEnd
+    Position pStart; //= varNameTok.pStart
+    Position pEnd; //= bodyNode.pEnd
 };
 
 class WhileNode : public Node {
 public:
     Node *conditionNode;
     Node *bodyNode;
-    // Position pStart = conditionNode.pStart
-    // Position pEnd = bodyNode.pEnd
+    Position pStart; //= conditionNode.pStart
+    Position pEnd; //= bodyNode.pEnd
+};
+
+class FuncDefNode : public Node {
+public:
+    Token varNameTok;
+    vector<Token> argNameToks;
+    Node *bodyNode;
+
 };
 #endif // NODE_HPP

@@ -22,6 +22,7 @@ enum TokenType {
     TT_EQUALS,
     TT_IDENTIFIER,
     TT_KEYWORD,
+    // funcs
     TT_COMMA,
     TT_ARROW,
     // LOGIC OPERATORS

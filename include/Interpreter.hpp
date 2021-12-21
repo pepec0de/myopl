@@ -5,63 +5,41 @@
 #include "Number.hpp"
 #include "RuntimeResult.hpp"
 #include "Context.hpp"
+#include "LangTools.hpp"
 
 class Interpreter {
-
+    LangTools langTools;
     public:
         RuntimeResult visit(Node* node, Context &context) {
-            if (typeid(*node) == typeid(VarAssignNode)) {
-                VarAssignNode *cast = dynamic_cast<VarAssignNode*>(node);
-                return visit_VarAssignNode(cast, context);
-            } else if (typeid(*node) == typeid(VarAccessNode)) {
-                VarAccessNode *cast = dynamic_cast<VarAccessNode*>(node);
-                return visit_VarAccessNode(cast, context);
-            } else if (typeid(*node) == typeid(NumberNode)) {
-                NumberNode *cast = dynamic_cast<NumberNode*>(node);
-                return visit_NumberNode(cast, context);
-            } else if (typeid(*node) == typeid(UnaryOpNode)) {
-                UnaryOpNode *cast = dynamic_cast<UnaryOpNode*>(node);
-                return visit_UnaryOpNode(cast, context);
-            } else if (typeid(*node) == typeid(BinOpNode)) {
-                BinOpNode *cast = dynamic_cast<BinOpNode*>(node);
-                return visit_BinaryOpNode(cast, context);
-            } else if (typeid(*node) == typeid(ForNode)) {
-                ForNode *cast = dynamic_cast<ForNode*>(node);
-                return visit_ForNode(cast, context);
-            } else if (typeid(*node) == typeid(WhileNode)) {
-                WhileNode *cast = dynamic_cast<WhileNode*>(node);
-                return visit_WhileNode(cast, context);
-            } else if (typeid(*node) == typeid(IfNode)) {
-                IfNode *cast = dynamic_cast<IfNode*>(node);
-                return visit_IfNode(cast, context);
+            switch (langTools.getNodeType(node)) {
+                case VarAssign:
+                    return visit_VarAssignNode((VarAssignNode*)node, context);
+
+                case VarAccess:
+                    return visit_VarAccessNode((VarAccessNode*)node, context);
+
+                case NumberN:
+                    return visit_NumberNode((NumberNode*)node, context);
+
+                case UnaryOp:
+                    return visit_UnaryOpNode((UnaryOpNode*)node, context);
+
+                case BinaryOp:
+                    return visit_BinaryOpNode((BinOpNode*)node, context);
+
+                case For:
+                    return visit_ForNode((ForNode*)node, context);
+
+                case While:
+                    return visit_WhileNode((WhileNode*)node, context);
+
+                case If:
+                    return visit_IfNode((IfNode*)node, context);
+
+                default:
+                    cout << "FATAL ERROR! Couldnt handle node type\n";
+                    return RuntimeResult();
             }
-//            switch (node->type) {
-//                case VarAssignNode:
-//                    return visit_VarAssignNode(node, context);
-//
-//                case VarAccessNode:
-//                    return visit_VarAccessNode(node, context);
-//
-//                case NumberNode:
-//                    return visit_NumberNode(node, context);
-//
-//                case UnaryOpNode:
-//                    return visit_UnaryOpNode(node, context);
-//
-//                case BinOpNode:
-//                    return visit_BinaryOpNode(node, context);
-//
-//                case ForNode:
-//                    return visit_ForNode(node, context);
-//
-//                case WhileNode:
-//                    return visit_WhileNode(node, context);
-//
-//                default:
-//                    return visit_IfNode(node, context);
-//            }
-            cout << "return RuntimeResult();\n";
-            return RuntimeResult();
         }
 
         RuntimeResult visit_NumberNode(NumberNode* node, Context context) {

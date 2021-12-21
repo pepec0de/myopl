@@ -25,17 +25,17 @@ void run(string text, Context &context) {
         if (resultAST.getError().isError()) {
             cout << resultAST.getError().as_string();
         } else {
-            //OperationTree ast;
-            //ast.setRootNode(resultAST.getNode());
             Node* rootNode = resultAST.getNode();
-            //cout << "AST: " << ast.as_string() << endl;
-            Interpreter interpreter;
-            RuntimeResult result = interpreter.visit(/*ast.getRootNode()*/rootNode, context);
-            if (result.getError().isError()) {
-                cout << result.getError().as_string() << endl;
-            } else {
-                cout << result.getValue().getValue() << endl;
-            }
+            if (rootNode != NULL) {
+                Interpreter interpreter;
+                RuntimeResult result = interpreter.visit(rootNode, context);
+                if (result.getError().isError()) {
+                    cout << result.getError().as_string() << endl;
+                } else {
+                    cout << result.getValue().getValue() << endl;
+                }
+
+            } else cout << "FATAL ERROR!!! Root pointer of AST is 0\n";
         }
     } else {
         cout << error.as_string();

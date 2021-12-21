@@ -146,6 +146,8 @@ public:
 
                 case ',':
                     tokens.push_back(Token(TT_COMMA, "", pos));
+                    advance();
+                    break;
 
                 default: {
                     // ERROR

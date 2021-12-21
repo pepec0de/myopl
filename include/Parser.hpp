@@ -26,14 +26,12 @@ class Parser {
             }
         }
 
-
-///REPROGRAMAR ENTERO ------------------------------------------------------------------------------------------------------------------------------
         ParseResult atom() {
             ParseResult res;
             Token tok = currTok;
 
             if (tok.getTokenType() == TT_INT || tok.getTokenType() == TT_FLOAT) {
-                NumberNode* result = new NumberNode();
+                NumberNode* result = new NumberNode;
                 if (result != NULL) {
                     // res.register(advance());
                     advance();
@@ -45,7 +43,7 @@ class Parser {
             } else if (tok.getTokenType() == TT_IDENTIFIER) {
                 // res.register(advance());
                 advance();
-                VarAccessNode* result = new VarAccessNode();
+                VarAccessNode* result = new VarAccessNode;
                 if (result != NULL) {
                     result->varNameTok = tok;
                     return res.success(result);
@@ -127,7 +125,7 @@ class Parser {
             }
 
             // Build cases tree
-            IfNode* result = new IfNode();
+            IfNode* result = new IfNode;
             if (result != NULL) {
                 result->cases = cases;
                 result->elseCase = elseCase;
@@ -409,7 +407,6 @@ class Parser {
             }
             return res.failure(MemoryError());
         }
-///-----------------------------------------------------------------------------------------------------------------------------------------------
 
     public:
         Parser() {}
