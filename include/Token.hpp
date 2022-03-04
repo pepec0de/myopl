@@ -7,6 +7,7 @@
 using namespace std;
 
 enum TokenType {
+    TT_NULL,
     TT_EOF,
     // ARITH
     TT_INT,
@@ -44,7 +45,11 @@ private:
 	Position posStart, posEnd;
 
 public:
-    Token() {}
+    Token() {
+        type = TT_NULL;
+        value = "";
+    }
+
     Token(TokenType pType) {
         type = pType;
         value = "";
@@ -76,6 +81,8 @@ public:
     Position getPosEnd() { return posEnd; }
     string as_string() {
         switch(type) {
+        case TT_NULL:
+            return "TT_NULL";
         case TT_EOF:
             return "TT_EOF";
 

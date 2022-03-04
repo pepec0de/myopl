@@ -28,6 +28,11 @@ class RuntimeError : public Error {
             cout << generateTraceback() << endl;
         }
 
+        string as_string() {
+            string error = Error::as_string() + "\n" + generateTraceback();
+            return error;
+        }
+
         string generateTraceback() {
             string result;
             Position pos = posStart;

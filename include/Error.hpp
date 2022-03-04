@@ -48,7 +48,7 @@ public:
         return result;
     }
 
-    string as_string() {
+    virtual string as_string() {
         string result = errorName
             + " : " + details
             + "\n File "

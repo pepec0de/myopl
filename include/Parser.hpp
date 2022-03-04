@@ -3,7 +3,6 @@
 
 #include "ParseResult.hpp"
 
-#define DEBUG false
 /*
     Clase dedicada a parsear los tokens que hemos recolectado, de manera que
     podemos construir nuestro AST para reconocer las instrucciones de nuestro lenguaje.
@@ -31,11 +30,10 @@ class Parser {
             Token tok = currTok;
 
             if (tok.getTokenType() == TT_INT || tok.getTokenType() == TT_FLOAT) {
-                NumberNode* result = new NumberNode;
+                // res.register(advance());
+                advance();
+                NumberNode* result = new NumberNode(tok);
                 if (result != NULL) {
-                    // res.register(advance());
-                    advance();
-                    result->numberTok = tok;
                     return res.success(result);
                 } else {
                     return res.failure(MemoryError());
@@ -43,9 +41,8 @@ class Parser {
             } else if (tok.getTokenType() == TT_IDENTIFIER) {
                 // res.register(advance());
                 advance();
-                VarAccessNode* result = new VarAccessNode;
+                VarAccessNode* result = new VarAccessNode(tok);
                 if (result != NULL) {
-                    result->varNameTok = tok;
                     return res.success(result);
                 } else {
                     return res.failure(MemoryError());
@@ -74,6 +71,10 @@ class Parser {
                 return res.success(node);
             } else if (tok.matches(TT_KEYWORD, "WHILE")) {
                 Node* node = res.mRegister(while_expr());
+                if (res.getError().isError()) return res;
+                return res.success(node);
+            } else if (tok.matches(TT_KEYWORD, "FUN")) {
+                Node* node = res.mRegister(func_def());
                 if (res.getError().isError()) return res;
                 return res.success(node);
             }
@@ -125,12 +126,10 @@ class Parser {
             }
 
             // Build cases tree
-            IfNode* result = new IfNode;
+            IfNode* result = new IfNode(cases, elseCase);
             if (result != NULL) {
-                result->cases = cases;
-                result->elseCase = elseCase;
+                return res.success(result);
             } else return res.failure(MemoryError());
-            return res.success(result);
         }
 
         ParseResult for_expr() {
@@ -179,16 +178,10 @@ class Parser {
             Node* body = res.mRegister(expr());
             if (res.getError().isError()) return res;
 
-            ForNode* result = new ForNode;
+            ForNode* result = new ForNode(varTok, startValue, endValue, stepValue, body);
             if (result != NULL) {
-                result->varNameTok = varTok;
-                result->startValueNode = startValue;
-                result->endValueNode = endValue;
-                result->stepValueNode = stepValue;
-                result->bodyNode = body;
+                return res.success(result);
             } else return res.failure(MemoryError());
-
-            return res.success(result);
         }
 
         ParseResult while_expr() {
@@ -206,34 +199,124 @@ class Parser {
             Node* body = res.mRegister(expr());
             if (res.getError().isError()) return res;
 
-            WhileNode* result = new WhileNode;
+            WhileNode* result = new WhileNode(condition, body);
             if (result != NULL) {
-                result->conditionNode = condition;
-                result->bodyNode = body;
-            } else res.failure(MemoryError());
+                return res.success(result);
+            } else return res.failure(MemoryError());
+        }
 
-            return res.success(result);
+        ParseResult func_def() {
+            ParseResult res;
+
+            advance();
+
+            Token varNameTok;
+            if (currTok.getTokenType() == TT_IDENTIFIER) {
+                varNameTok = currTok;
+
+                advance();
+
+                if (currTok.getTokenType() != TT_LPAREN) {
+                    return res.failure(InvalidSyntaxError(currTok.getPosStart(), currTok.getPosEnd(), "Expected \'(\'"));
+                }
+            } else {
+                if (currTok.getTokenType() != TT_LPAREN) {
+                    return res.failure(InvalidSyntaxError(currTok.getPosStart(), currTok.getPosEnd(), "Expected identifier or \'(\'"));
+                }
+            }
+
+            advance();
+
+            vector<Token> argNameToks;
+
+            if (currTok.getTokenType() == TT_IDENTIFIER) {
+                argNameToks.push_back(currTok);
+
+                advance();
+
+                while (currTok.getTokenType() == TT_COMMA) {
+                    advance();
+
+                    if (currTok.getTokenType() != TT_IDENTIFIER) {
+                        return res.failure(InvalidSyntaxError(currTok.getPosStart(), currTok.getPosEnd(), "Expected identifier"));
+                    }
+                    argNameToks.push_back(currTok);
+                    advance();
+                }
+
+                if (currTok.getTokenType() != TT_RPAREN) {
+                    return res.failure(InvalidSyntaxError(currTok.getPosStart(), currTok.getPosEnd(), "Expected \')\' or \',\'"));
+                }
+
+                advance();
+
+                if (currTok.getTokenType() != TT_ARROW) {
+                    return res.failure(InvalidSyntaxError(currTok.getPosStart(), currTok.getPosEnd(), "Expected \'->\'"));
+                }
+
+                advance();
+
+                Node *nodeToReturn = res.mRegister(expr());
+                if (res.getError().isError()) return res;
+
+                FuncDefNode *result = new FuncDefNode(varNameTok, argNameToks, nodeToReturn);
+                if (result != NULL) return res.success(result);
+            }
+            return res.failure(MemoryError());
         }
 
         ParseResult power() {
             TokenType tts[] = {TT_POW};
-            return bin_op("atom", tts, 1);
+            return bin_op("call", tts, 1);
+        }
+
+        ParseResult call() {
+            ParseResult res;
+            Node *atomNode = res.mRegister(atom());
+            if (res.getError().isError()) return res;
+
+            if (currTok.getTokenType() == TT_LPAREN) {
+                advance();
+
+                vector<Node*> argNodes;
+                if (currTok.getTokenType() == TT_RPAREN) {
+                    advance();
+                } else {
+                    argNodes.push_back(res.mRegister(expr()));
+                    if (res.getError().isError())
+                        return res.failure(InvalidSyntaxError(currTok.getPosStart(), currTok.getPosEnd(), "Expected int, float, identifier or term"));
+
+                    while (currTok.getTokenType() == TT_COMMA) {
+                        advance();
+
+                        argNodes.push_back(res.mRegister(expr()));
+                        if (res.getError().isError()) return res;
+                    }
+
+                    if (currTok.getTokenType() != TT_RPAREN) {
+                        return res.failure(InvalidSyntaxError(currTok.getPosStart(), currTok.getPosEnd(), "Expected \')\' or \',\'"));
+                    }
+
+                    advance();
+                }
+                CallNode *result = new CallNode(atomNode, argNodes);
+                if (result != NULL) return res.success(result);
+                else return res.failure(MemoryError());
+            }
+            return res.success(atomNode);
         }
 
         ParseResult factor() {
             ParseResult res;
             Token tok = currTok;
 
-            if (tok.getTokenType() == TT_PLUS ||tok.getTokenType() == TT_MINUS) {
-                UnaryOpNode* result = new UnaryOpNode;
+            if (tok.getTokenType() == TT_PLUS || tok.getTokenType() == TT_MINUS) {
+                // res.register(advance());
+                advance();
+                Node* factorNode = res.mRegister(factor());
+                if (res.getError().isError()) return res;
+                UnaryOpNode* result = new UnaryOpNode(tok, factorNode);
                 if (result != NULL) {
-                    // res.register(advance());
-                    advance();
-                    Node* factorNode = res.mRegister(factor());
-                    if (res.getError().isError()) return res;
-
-                    result->opTok = tok;
-                    result->node = factorNode;
                     return res.success(result);
                 } else {
                     return res.failure(MemoryError());
@@ -270,11 +353,8 @@ class Parser {
                 if (res.getError().isError()) {
                     return res;
                 }
-                VarAssignNode* result = new VarAssignNode;
+                VarAssignNode* result = new VarAssignNode(varToken, varExpr);
                 if (result != NULL) {
-                    // VarAssignNode
-                    result->varNameTok = varToken;
-                    result->valueNode = varExpr;
                     return res.success(result);
                 } else {
                     return res.failure(MemoryError());
@@ -297,10 +377,8 @@ class Parser {
                 Node* node = res.mRegister(comp_expr());
                 if (res.getError().isError()) return res;
 
-                UnaryOpNode* result = new UnaryOpNode;
+                UnaryOpNode* result = new UnaryOpNode(opTok, node);
                 if (result != NULL) {
-                    result->opTok = opTok;
-                    result->node = node;
                     return res.success(result);
                 } else {
                     res.failure(MemoryError());
@@ -336,7 +414,6 @@ class Parser {
         }
         ParseResult bin_op(string func, TokenType tts[], int ttsSize) {
             ParseResult res;
-            if (DEBUG) cout << "START bin_op(\"" << func << "\")\n";
             Node* leftNode = NULL;
             if (func == "factor") {
                 leftNode = res.mRegister(factor());
@@ -346,9 +423,12 @@ class Parser {
                 leftNode = res.mRegister(atom());
             } else if (func == "comp_expr") {
                 leftNode = res.mRegister(comp_expr());
-            } else /*if (func == "arith_expr")*/{
+            } else if (func == "arith_expr") {
                 leftNode = res.mRegister(arith_expr());
+            } else /* if (func == "call") */ {
+                leftNode = res.mRegister(call());
             }
+
             // Comprobamos si ParseResult ha devuelto error
             if (res.getError().isError()) {
                 // Si devuelve error lo devolvemos a bin_op()
@@ -356,7 +436,6 @@ class Parser {
             }
 
             if (leftNode != NULL) {
-                if (DEBUG) cout << "AFTER \"" << func << "\": leftNode = ";
                 //printNode(leftNode);
                 BinOpNode* binOpNode = NULL;
 
@@ -381,27 +460,17 @@ class Parser {
                     if (res.getError().isError()) {
                         return res;
                     }
-                    if (DEBUG) cout << "IN LOOP rightNode = ";
-                    //printNode(rightNode);
-                    binOpNode = new BinOpNode;
-                    if (binOpNode != NULL) {
-                        binOpNode->opTok = op_tok;
-                        //binOpNode->type = BinOpNode;
-                        binOpNode->leftNode = leftNode;
-                        binOpNode->rightNode = rightNode;
-                        aux = binOpNode;
-                        if (DEBUG) cout << "IN LOOP binOpNode = ";
-                        //printNode(binOpNode);
-                    } else return res.failure(MemoryError());
+
+                    binOpNode = new BinOpNode(op_tok, leftNode, rightNode);
+                    aux = binOpNode;
+                    if (binOpNode == NULL) {
+                        return res.failure(MemoryError());
+                    }
                 }
                 aux = NULL;
                 if (binOpNode == NULL) {
-                    if (DEBUG) cout << "END bin_op(\"" << func << "\") => leftNode = ";
-                    //printNode(leftNode);
                     return res.success(leftNode);
                 } else {
-                    if (DEBUG) cout << "END bin_op(\"" << func << "\") => binOpNode = ";
-                    //printNode(binOpNode);
                     return res.success(binOpNode);
                 }
             }

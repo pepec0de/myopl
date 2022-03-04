@@ -52,6 +52,7 @@
 		<Unit filename="include/StringUtils.hpp" />
 		<Unit filename="include/SymbolTable.hpp" />
 		<Unit filename="include/Token.hpp" />
+		<Unit filename="include/Value.hpp" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Context.cpp" />
 		<Unit filename="src/Error.cpp" />
@@ -67,6 +68,7 @@
 		<Unit filename="src/StringUtils.cpp" />
 		<Unit filename="src/SymbolTable.cpp" />
 		<Unit filename="src/Token.cpp" />
+		<Unit filename="src/Value.cpp" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>

@@ -24,6 +24,8 @@ public:
             return While;
         } else if (typeid(*node) == typeid(IfNode)) {
             return If;
+        } else if (typeid(*node) == typeid(FuncDefNode)) {
+            return FuncDef;
         }
 
         return NullNode;

@@ -10,7 +10,7 @@ void input(string &cmdStr) {
     getline(cin, cmdStr);
 }
 
-void run(string text, Context &context) {
+void run(string text, Context *context) {
     Lexer lexer(text);
     Error error;
 
@@ -52,8 +52,8 @@ int main() {
     value.type = "number"; value.value = "0";
     globalST.append("false", value);
 
-    Context context("<program>");
-    context.setSymbolTable(globalST);
+    Context *context = new Context("<program>");
+    context->setSymbolTable(globalST);
 
     // String para almacenar la operacion
     string cmdStr;

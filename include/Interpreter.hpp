@@ -10,7 +10,7 @@
 class Interpreter {
     LangTools langTools;
     public:
-        RuntimeResult visit(Node* node, Context &context) {
+        RuntimeResult visit(Node* node, Context *context) {
             switch (langTools.getNodeType(node)) {
                 case VarAssign:
                     return visit_VarAssignNode((VarAssignNode*)node, context);
@@ -42,16 +42,16 @@ class Interpreter {
             }
         }
 
-        RuntimeResult visit_NumberNode(NumberNode* node, Context context) {
+        RuntimeResult visit_NumberNode(NumberNode* node, Context *context) {
             Number number(stof(node->numberTok.getValue()));
-            number.setNumberPosition(node->numberTok.getPosStart(), node->numberTok.getPosEnd());
+            number.setPosition(node->numberTok.getPosStart(), node->numberTok.getPosEnd());
             number.setContext(context);
 
             RuntimeResult result;
             return result.success(number);
         }
 
-        RuntimeResult visit_BinaryOpNode(BinOpNode* node, Context context) {
+        RuntimeResult visit_BinaryOpNode(BinOpNode* node, Context *context) {
             RuntimeResult res;
             Number left = res.mRegister(visit(node->leftNode, context));
             if (res.getError().isError()) return res;
@@ -119,11 +119,11 @@ class Interpreter {
 
             if (divError.isError()) return res.failure(divError);
             // else
-            result.setNumberPosition(node->opTok.getPosStart(), node->opTok.getPosStart()); // la posicion esta mal
+            result.setPosition(node->opTok.getPosStart(), node->opTok.getPosStart()); // la posicion esta mal
             return res.success(result);
         }
 
-        RuntimeResult visit_UnaryOpNode(UnaryOpNode* node, Context context) {
+        RuntimeResult visit_UnaryOpNode(UnaryOpNode* node, Context *context) {
             RuntimeResult res;
             Number number = res.mRegister(visit(node->node, context));
             if (res.getError().isError()) return res;
@@ -134,21 +134,21 @@ class Interpreter {
                 number = number.getCompNOT();
             }
 
-            number.setNumberPosition(node->opTok.getPosStart(), node->opTok.getPosEnd());
+            number.setPosition(node->opTok.getPosStart(), node->opTok.getPosEnd());
             return res.success(number);
         }
 
-        RuntimeResult visit_VarAccessNode(VarAccessNode* node, Context &context) {
+        RuntimeResult visit_VarAccessNode(VarAccessNode* node, Context *context) {
             RuntimeResult res;
             string varName = node->varNameTok.getValue();
-            SymbolValue varValue = context.getSymbolTable().get(varName);
+            SymbolValue varValue = context->getSymbolTable().get(varName);
             if (varValue.type == "") {
-                return res.failure(RuntimeError(node->varNameTok.getPosStart(), node->varNameTok.getPosStart(), "\'" + varName + "\' is not defined", &context));
+                return res.failure(RuntimeError(node->varNameTok.getPosStart(), node->varNameTok.getPosStart(), "\'" + varName + "\' is not defined", context));
             }
             return res.success(Number(stof(varValue.value)));
         }
 
-        RuntimeResult visit_VarAssignNode(VarAssignNode* node, Context &context) {
+        RuntimeResult visit_VarAssignNode(VarAssignNode* node, Context *context) {
             RuntimeResult res;
 
             Number num = res.mRegister(visit(node->valueNode, context));
@@ -160,11 +160,11 @@ class Interpreter {
             SymbolValue varValue;
             varValue.type = "number";
             varValue.value = num.as_string();
-            context.getSymbolTable().append(varName, varValue);
+            context->getSymbolTable().append(varName, varValue);
             return res.success(num);
         }
 
-        RuntimeResult visit_IfNode(IfNode* node, Context &context) {
+        RuntimeResult visit_IfNode(IfNode* node, Context *context) {
             RuntimeResult res;
             // Iterate through cases
             for (unsigned int i = 0; i < node->cases.size(); i++) {
@@ -189,7 +189,7 @@ class Interpreter {
             return res.success(none);
         }
 
-        RuntimeResult visit_ForNode(ForNode* node, Context &context) {
+        RuntimeResult visit_ForNode(ForNode* node, Context *context) {
             RuntimeResult res;
 
             Number startValue = res.mRegister(visit(node->startValueNode, context));
@@ -217,7 +217,7 @@ class Interpreter {
                 SymbolValue value;
                 value.type = "number";
                 value.value = Number(i).as_string();
-                context.getSymbolTable().append(node->varNameTok.getValue(), value);
+                context->getSymbolTable().append(node->varNameTok.getValue(), value);
                 cout << "SymbolTable:\n";
                 i += stepValue.getValue();
 
@@ -234,7 +234,7 @@ class Interpreter {
             return res.success(Number(0));
         }
 
-        RuntimeResult visit_WhileNode(WhileNode* node, Context &context) {
+        RuntimeResult visit_WhileNode(WhileNode* node, Context *context) {
             RuntimeResult res;
             Number condition;
             while(true) {
